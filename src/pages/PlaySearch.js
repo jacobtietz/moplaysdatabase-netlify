@@ -42,6 +42,7 @@ export default function PlaySearch() {
 
   // ------------------- Fetch Plays -------------------
   const fetchPlays = async (newPage = 1) => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     try {
       const response = await axios.get(`${API_URL}/api/plays`, {
         params: {
@@ -92,6 +93,7 @@ export default function PlaySearch() {
   };
 
   // ------------------- Populate search from URL -------------------
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     document.title = "MPDB";
 
@@ -109,6 +111,7 @@ export default function PlaySearch() {
   }, [location.search]); // dependency on location.search ensures refresh on redirect or manual refresh
 
   // ------------------- Global Enter Key Listener -------------------
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleGlobalEnter = (e) => {
       if (e.key === "Enter" && !enterCooldown) {
@@ -119,6 +122,7 @@ export default function PlaySearch() {
     };
     document.addEventListener("keydown", handleGlobalEnter);
     return () => document.removeEventListener("keydown", handleGlobalEnter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enterCooldown]);
 
   // ------------------- Click Outside Menu -------------------
