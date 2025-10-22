@@ -19,7 +19,8 @@ const formatPhoneNumber = (number, defaultCountry = "US") => {
 
 export default function Profile() {
   const { id } = useParams();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // profile being viewed
+  const [currentUser, setCurrentUser] = useState(null); // logged-in user
   const [loading, setLoading] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -30,8 +31,13 @@ export default function Profile() {
   useEffect(() => {
     document.title = "Profile – MPDB";
 
-    const fetchUser = async () => {
+    const fetchUsers = async () => {
       try {
+        // Fetch logged-in user for header
+        const currentUserRes = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
+        setCurrentUser(currentUserRes.data.user);
+
+        // Fetch profile being viewed
         const endpoint = id
           ? `${API_URL}/api/users/${id}`
           : `${API_URL}/api/users/profile`;
@@ -51,7 +57,7 @@ export default function Profile() {
       }
     };
 
-    fetchUser();
+    fetchUsers();
   }, [id, navigate, API_URL]);
 
   // Close dropdown if click outside
@@ -68,7 +74,7 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       await axios.post(`${API_URL}/api/auth/logout`, {}, { withCredentials: true });
-      setUser(null);
+      setCurrentUser(null);
       navigate("/login", { replace: true });
     } catch (err) {
       console.error("Logout failed:", err);
@@ -79,14 +85,15 @@ export default function Profile() {
   if (!user) return <p>User not found.</p>;
 
   const profile = user.profile || {};
-  const firstLetter = user?.firstName?.charAt(0) || "";
-  const restName = user ? `${user.firstName.slice(1)} ${user.lastName}` : "";
+
+  const firstLetter = currentUser?.firstName?.charAt(0) || "";
+  const restName = currentUser ? `${currentUser.firstName.slice(1)} ${currentUser.lastName}` : "";
 
   return (
     <div className="profile-wrapper">
-      {/* --- Header with User Menu --- */}
+      {/* --- Header with User Menu (shows logged-in user) --- */}
       <header className="profile-header-top">
-        {user && (
+        {currentUser && (
           <div className="user-section2" ref={menuRef}>
             <div
               className="user-icon-circle"
@@ -98,7 +105,7 @@ export default function Profile() {
 
             {userMenuOpen && (
               <div className="user-dropdown">
-                <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
+                <button onClick={() => navigate(`/profile/${currentUser._id}`)}>Profile</button>
                 <button onClick={() => navigate("/settings")}>Settings</button>
                 <button onClick={handleLogout}>Logout</button>
               </div>
@@ -107,7 +114,7 @@ export default function Profile() {
         )}
       </header>
 
-      {/* --- Main Profile Content --- */}
+      {/* --- Main Profile Content (shows profile being viewed) --- */}
       <section className="profile-header">
         <div className="profile-top">
           <img

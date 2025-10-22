@@ -313,7 +313,7 @@ export default function CreatePlay() {
           <button type="submit">Create Play</button>
         </form>
       ) : (
-        <p>You do not have permission to create a play.</p>
+        <p></p>
       )}
     </div>
   );
