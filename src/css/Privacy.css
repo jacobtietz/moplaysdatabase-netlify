@@ -1,0 +1,268 @@
+/* -------------------------------------------------------------------------- */
+/* Global Reset and Typography (Figtree based on user's theme) */
+/* -------------------------------------------------------------------------- */
+
+@font-face {
+    font-family: 'FigtreeVar';
+    src: url('../fonts/Figtree[wght].ttf') format('truetype');
+    font-weight: 100 900;
+    font-stretch: 75% 125%;
+}
+
+.privacy-page-container {
+    font-family: 'FigtreeVar', 'Figtree', sans-serif;
+    min-height: 100vh;
+    background-color: #EAEAEA; /* Light gray background */
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    color: #231F20; /* Dark text */
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .privacy-page-container {
+        padding: 2rem;
+    }
+}
+
+.bold-text {
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.125rem;
+    color: #4b5563; /* text-gray-600 */
+}
+
+/* -------------------------------------------------------------------------- */
+/* Card Structure */
+/* -------------------------------------------------------------------------- */
+
+.privacy-card {
+    width: 100%;
+    max-width: 900px;
+    background-color: white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    border-top: 8px solid #7366BD; /* Indigo border for brand consistency */
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .privacy-card {
+        padding: 2.5rem;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Header and Sections (Purple Theme: #7366BD) */
+/* -------------------------------------------------------------------------- */
+
+.privacy-header {
+    margin-bottom: 2rem;
+}
+
+.privacy-header h1 {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 800;
+    color: #7366BD; /* Primary brand color */
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .privacy-header h1 {
+        font-size: 3rem;
+        line-height: 1;
+    }
+}
+
+.policy-section {
+    margin-bottom: 2.5rem;
+}
+
+.policy-section h2.policy-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #7366BD; /* Primary brand color */
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+.policy-section h3.section-subtitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #231F20; /* Darker text */
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.policy-paragraph {
+    margin-bottom: 1rem;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.data-list {
+    list-style: disc outside;
+    margin-left: 1.25rem;
+    margin-bottom: 1rem;
+    padding-left: 0;
+}
+
+.data-list li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Highlight Boxes (User Rights) */
+/* -------------------------------------------------------------------------- */
+
+.section-highlight-light {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #f2f4fa; /* Light background color */
+    border-radius: 0.5rem;
+    border-left: 4px solid #7366BD; /* Primary brand color border */
+}
+
+.highlight-title {
+    font-weight: 700;
+    color: #7366BD;
+    margin-bottom: 0.75rem;
+}
+
+.rights-list {
+    list-style: none;
+    padding: 0;
+}
+
+.rights-list li {
+    margin-bottom: 1rem;
+}
+
+.rights-list li strong {
+    color: #000000;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Footer */
+/* -------------------------------------------------------------------------- */
+
+.privacy-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.privacy-footer a {
+    color: #4f46e5; /* Link color */
+    text-decoration: none;
+}
+
+.privacy-footer a:hover {
+    text-decoration: underline;
+}
+
+.privacy-footer .last-updated {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Header / Search + User Section Alignment */
+/* -------------------------------------------------------------------------- */
+
+.search-user-container {
+  display: flex;
+  justify-content: space-between; /* search bar left, user icon right */
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  position: relative;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  max-width: 600px; /* optional: limit search bar width */
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-left: none;
+  background-color: #262223;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+/* User Section */
+.user-section {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative; /* dropdown absolute relative to this */
+  gap: 8px;
+}
+
+.user-icon-circle {
+  background-color: #262223;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Dropdown Menu */
+.user-dropdown {
+  position: absolute;
+  top: 48px; /* below the user icon */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  min-width: 140px;
+}
+
+.user-dropdown button {
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #231F20;
+}
+
+.user-dropdown button:hover {
+  background-color: #f0f0f0;
+}

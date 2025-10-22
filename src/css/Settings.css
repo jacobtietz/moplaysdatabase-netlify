@@ -1,0 +1,152 @@
+.settings-wrapper {
+  font-family: 'FigtreeVar', 'Figtree', sans-serif;
+  background-color: #eaeaea;
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+/* Header */
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #231F20;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.settings-header h1 {
+  margin: 0;
+}
+
+/* User Section */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  color: white;
+}
+
+.user-icon-circle {
+  width: 2rem;
+  height: 2rem;
+  background-color: #444;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  z-index: 10;
+}
+
+.user-dropdown button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-dropdown button:hover {
+  background-color: #f3f3f3;
+}
+
+/* Main editor */
+.settings-main {
+  max-width: 900px;
+  margin: 2rem auto;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
+}
+
+.profile-editor h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* Profile picture */
+.profile-pic-preview {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.profile-pic-preview img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #231F20;
+}
+
+.profile-pic-preview input[type="file"] {
+  cursor: pointer;
+}
+
+/* Form Fields */
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-fields label {
+  font-weight: 500;
+}
+
+.profile-fields input,
+.profile-fields select,
+.profile-fields textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.profile-fields textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Center the checkbox */
+.checkbox-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.save-btn {
+  background-color: #231F20;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.save-btn:hover {
+  background-color: #444;
+}

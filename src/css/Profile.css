@@ -1,0 +1,231 @@
+/* ---------------- Profile Page ---------------- */
+.profile-wrapper {
+  background-color: #eaeaea;
+  font-family: 'FigtreeVar', 'Figtree', sans-serif;
+  color: #231F20;
+}
+
+/* --- Header --- */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 1.25rem; /* slightly reduced bottom padding */
+}
+
+.profile-top {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: nowrap;
+}
+
+.profile-text {
+  flex: 0 0 350px; /* sets a fixed width for wrapping */
+  white-space: normal; /* allow normal wrapping */
+  word-break: break-word; /* break long words if needed */
+}
+
+/* --- Profile Info Text Wrapping --- */
+.profile-info {
+  display: inline-block;
+  max-width: 1ch; /* wraps around text inside a set width */
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* --- Profile Image --- */
+.profile-photo {
+  width: 330px;
+  height: 330px;
+  object-fit: cover;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+/* --- Text --- */
+.profile-text h1 {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 700;
+  font-size: 2.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-text p {
+  font-family: 'FigtreeVar', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* --- Links --- */
+.profile-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.profile-link {
+  font-family: 'Josefin Slab', serif;
+  color: #231F20;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.profile-links .profile-link:nth-of-type(1):hover {
+  color: #DD6E42; /* view plays */
+}
+
+.profile-links .profile-link:nth-of-type(2):hover {
+  color: #7366BD; /* submit your play */
+}
+
+.profile-links .profile-link:nth-of-type(3):hover {
+  color: #4F6D7A; /* contact */
+}
+
+
+.divider {
+  margin: 1rem 0;
+  width: 60%;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+}
+
+/* --- Bottom --- */
+.profile-bottom {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  padding: 0rem 1rem 2rem; /* moved up, less space below */
+  flex-wrap: wrap;
+  font-size: 100;
+  margin-top: -3rem;
+}
+
+.general-info,
+.biography {
+  width: 350px;
+  max-width: 90%;
+}
+
+.general-info h3,
+.biography h3 {
+  font-family: 'Josefin Slab', serif;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #231F20;
+}
+
+.general-info p,
+.biography p {
+  font-family: 'FigtreeVar', sans-serif;
+  line-height: 1;
+  font-size: 0.75rem;
+  color: #231f20af;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .profile-top {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  .profile-bottom {
+    flex-direction: column;
+    align-items: center;
+  }
+  .general-info,
+  .biography {
+    width: 90%;
+  }
+}
+
+/* ---------------- Font Imports ---------------- */
+@font-face {
+  font-family: 'FigtreeVar';
+  src: url('../fonts/Figtree[wght].ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+}
+
+@font-face {
+  font-family: 'Josefin Slab';
+  src: url('../fonts/JosefinSlab-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 700;
+}
+
+/* --- User Section (from Settings) --- */
+.profile-header-top {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+  background-color: #231F20;
+  color: white;
+}
+
+.user-section2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  color: white;
+}
+
+.user-section1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+}
+
+.user-icon-circle {
+  width: 2rem;
+  height: 2rem;
+  background-color: #444;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  z-index: 10;
+}
+
+.user-dropdown button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.user-dropdown button:hover {
+  background-color: #f3f3f3;
+}

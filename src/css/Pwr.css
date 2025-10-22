@@ -1,0 +1,183 @@
+/* ---------------- Font ---------------- */
+@font-face {
+  font-family: 'FigtreeVar';
+  src: url('../fonts/Figtree[wght].ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+}
+
+/* ---------------- Global / Reset ---------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'FigtreeVar', 'Figtree', sans-serif;
+  background-color: #eaeaea;
+  overflow-x: hidden;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  padding-bottom: 7em;
+}
+
+/* ---------------- Container ---------------- */
+.auth-page-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  margin-top: 10vh;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  background-color: white;
+  width: 100%;
+  max-width: 30em;
+  padding: 2em;
+  border-radius: 0.5em;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-top: 5px solid #7366BD;
+}
+
+/* ---------------- Headers / Subtitle ---------------- */
+.auth-header h1 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #7366BD;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------------- Form ---------------- */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-input {
+  padding: 1.25em 1.25em;
+  border-radius: 0.3em;
+  border: 0.03em solid rgba(0,0,0,0.25);
+  font-size: 0.9em;
+  color: #333;
+  box-shadow: 0 0.13em 0.26em rgba(0,0,0,0.1);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: #7366BD;
+  box-shadow: 0 0 0 2px rgba(115, 102, 189, 0.2);
+}
+
+input::placeholder {
+  color: transparent;
+}
+
+/* ---------------- Buttons ---------------- */
+.submit-button {
+  width: 100%;
+  background-color: #7366BD;
+  color: #fff;
+  padding: 0.7em;
+  font-size: 1.2em;
+  font-weight: 600;
+  border-radius: 0.3em;
+  border: 0.03em solid rgba(0,0,0,0.25);
+  box-shadow: 0 0.13em 0.26em rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #5d519e;
+}
+
+.submit-button:disabled {
+  background: #a0a0a0 !important;
+  cursor: not-allowed;
+}
+
+/* ---------------- Status Messages ---------------- */
+.status-message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+.status-message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #34d399;
+}
+
+.status-message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+}
+
+/* ---------------- Bottom Links ---------------- */
+.bottom-links {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.bottom-link {
+  text-decoration: none;
+  color: rgba(46, 42, 43, 0.541);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.bottom-link:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.separator {
+  color: #231f2054;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (min-width: 768px) {
+  .auth-page-container {
+    padding: 2rem;
+  }
+}

@@ -1,0 +1,388 @@
+@font-face {
+  font-family: 'FigtreeVar';
+  src: url('../fonts/Figtree[wght].ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+}
+
+/* --- Header --- */
+.mpdb-header {
+  background-color: #26222300;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 10px;
+}
+
+
+/* --- Search + User Section --- */
+.search-user-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.search-bar {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-bar input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.search-bar button {
+  background-color: #506d8b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.search-bar button:hover {
+  background-color: #3c5268;
+}
+
+.user-section1 {
+  display: flex;
+  align-items: center;
+  gap: 1.5px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+}
+
+.user-icon {
+  font-size: 1.6rem;
+  color: #333;
+}
+
+/* --- Filters --- */
+.search-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 30px auto;
+}
+
+.search-filters select {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  min-width: 160px;
+}
+
+/* --- Filter Button & Dropdown --- */
+.filter-wrapper {
+  position: relative;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #506d8b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.filter-btn:hover {
+  background-color: #3c5268;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 14px 18px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  width: 260px;
+  animation: fadeIn 0.2s ease;
+}
+
+.filter-dropdown h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.filter-dropdown label {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.filter-dropdown input {
+  margin-right: 8px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Results Count --- */
+.results-count {
+  text-align: center;
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+/* --- Play Cards --- */
+.play-results {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto 40px auto;
+}
+
+.play-card {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  transition: none;
+  position: relative; /* for edit button */
+}
+
+.play-card img {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  background-color: #eaeaea;
+  border-radius: 6px;
+}
+
+.play-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 4px;
+  flex: 1;
+  padding: 0;
+}
+
+.play-info h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 2px 0;
+}
+
+.play-author {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 0 4px 0;
+}
+
+.play-details,
+.play-meta {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 2px 0;
+}
+
+.play-abstract {
+  font-size: 0.9rem;
+  color: #333;
+  margin: 4px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.play-abstract.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+}
+
+.read-more-btn {
+  font-size: 0.85rem;
+  color: #DD6E42;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: -38.5rem;
+}
+
+.read-more-btn:hover {
+  text-decoration: underline;
+}
+
+.request-sample-btn {
+  background-color: #7366BD;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  align-self: flex-start;
+  margin-top: 6px;
+  margin-bottom: 1rem;
+}
+
+.request-sample-btn:hover {
+  background-color: #7366bd79;
+}
+
+.play-divider {
+  margin: 0rem 0;
+  width: 120%;
+  align-self: center;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+}
+
+.top-pagination {
+  margin: 20px auto;
+}
+
+/* --- Title + Edit Row --- */
+.title-edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-edit-row h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111;
+}
+
+/* --- Edit Play Button --- */
+.edit-play-btn {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  background-color: #DD6E42;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  transition: background 0.2s ease;
+}
+
+.edit-play-btn:hover {
+  background-color: #9e4522d3;
+}
+
+/* --- Play Actions --- */
+.play-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.request-sample-btn,
+.edit-play-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* --- Pagination --- */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover,
+.pagination button.active {
+  background: #506d8b;
+  color: #fff;
+  border-color: #506d8b;
+  text-decoration: underline;
+}
+
+.floating-create-play-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #231F20;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: transform 0.2s;
+}
+
+.floating-create-play-btn:hover {
+  transform: scale(1.1);
+}
+
+.floating-create-play-btn img {
+  width: 65%;
+  height: 65%;
+  object-fit: contain;
+}

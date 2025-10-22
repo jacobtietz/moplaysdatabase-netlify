@@ -1,0 +1,249 @@
+/* -------------------------------------------------------------------------- */
+/* Global Reset and Typography */
+/* -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: 'FigtreeVar';
+  src: url('../fonts/Figtree[wght].ttf') format('truetype');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+}
+
+.dmca-page-container {
+    font-family: 'FigtreeVar', 'Figtree', sans-serif;
+    min-height: 100vh;
+    background-color: #EAEAEA; /* bg-gray-100 */
+    padding: 1rem; /* p-4 */
+    display: flex;
+    justify-content: center;
+    color: #231F20; /* text-gray-800 */
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .dmca-page-container {
+        padding: 2rem; /* md:p-8 */
+    }
+}
+
+.bold-text {
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.125rem; /* text-lg */
+    color: #4b5563; /* text-gray-600 */
+}
+
+/* -------------------------------------------------------------------------- */
+/* Card Structure */
+/* -------------------------------------------------------------------------- */
+
+.dmca-card {
+    width: 100%;
+    max-width: 900px; /* max-w-4xl */
+    background-color: white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+    border-radius: 0.75rem; /* rounded-xl */
+    padding: 1.5rem; /* p-6 */
+    border-top: 8px solid #7366BD; /* border-t-8 border-indigo-600 */
+    box-sizing: border-box;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .dmca-card {
+        padding: 2.5rem; /* md:p-10 */
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Header and Sections */
+/* -------------------------------------------------------------------------- */
+
+.dmca-header {
+    margin-bottom: 2rem; /* mb-8 */
+}
+
+.dmca-header h1 {
+    font-size: 2.25rem; /* text-4xl */
+    line-height: 2.5rem;
+    font-weight: 800; /* font-extrabold */
+    color: #7366BD; /* text-indigo-800 */
+    margin-bottom: 0.5rem; /* mb-2 */
+}
+
+@media (min-width: 768px) {
+    .dmca-header h1 {
+        font-size: 3rem; /* md:text-5xl */
+        line-height: 1;
+    }
+}
+
+.policy-section {
+    margin-bottom: 2.5rem; /* mb-10 */
+}
+
+.policy-section h2.policy-title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #7366BD; /* text-indigo-700 */
+    margin-bottom: 1.25rem; /* mb-5 */
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.5rem; /* pb-2 */
+}
+
+.policy-section h3.section-subtitle {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    color: #7366BD; /* text-gray-800 */
+    margin-top: 1.5rem; /* mt-6 */
+    margin-bottom: 0.75rem; /* mb-3 */
+}
+
+.policy-paragraph {
+    margin-bottom: 1rem; /* mb-4 */
+    color: #374151; /* text-gray-700 */
+    line-height: 1.6;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Highlight Boxes (Copyright & Notice Requirements) */
+/* -------------------------------------------------------------------------- */
+
+.section-highlight-gray {
+    margin-bottom: 2rem; /* mb-8 */
+    padding: 1rem; /* p-4 */
+    background-color: #f9fafb; /* bg-gray-50 */
+    border-radius: 0.5rem; /* rounded-lg */
+    border-left: 4px solid #d1d5db; /* border-l-4 border-gray-300 */
+}
+
+.section-highlight-gray h2 {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 0.75rem; /* mb-3 */
+}
+
+.section-highlight-blue {
+    background-color: #f2f4fa; /* bg-indigo-50 */
+    padding: 1.5rem; /* p-6 */
+    border-radius: 0.5rem; /* rounded-lg */
+}
+
+.section-highlight-blue .highlight-title {
+    font-weight: 700; /* font-bold */
+    color: #7366BD; /* text-indigo-700 */
+    margin-bottom: 0.75rem; /* mb-3 */
+}
+
+.dmca-list {
+    list-style: decimal inside;
+    line-height: 1.6;
+}
+
+.dmca-list li {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    text-indent: -1rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Designated Agent Section (Green Box) */
+/* -------------------------------------------------------------------------- */
+
+.agent-section {
+    margin-bottom: 2.5rem; /* mb-10 */
+    padding: 1.5rem; /* p-6 */
+    background-color: #f9fafb; /* bg-green-50 */
+    border-radius: 0.75rem; /* rounded-xl */
+    border-left: 4px solid #7366BD; /* border-l-4 border-green-500 */
+}
+
+.agent-section h2.agent-title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #7366BD; /* text-green-700 */
+    margin-bottom: 1.25rem; /* mb-5 */
+}
+
+.agent-intro {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 500; /* font-medium */
+    color: #374151; /* text-gray-700 */
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+.agent-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* space-y-3 */
+    color: #374151; /* text-gray-700 */
+    font-size: 1.125rem; /* text-lg */
+}
+
+.agent-detail-item {
+    display: flex;
+    flex-direction: column; /* Default stack on mobile */
+    align-items: flex-start;
+}
+
+@media (min-width: 640px) {
+    .agent-detail-item {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.agent-label {
+    font-weight: 600; /* font-semibold */
+    min-width: 7rem;
+    margin-bottom: 0.25rem;
+}
+
+@media (min-width: 640px) {
+    .agent-label {
+        margin-bottom: 0;
+        margin-right: 0.5rem;
+    }
+}
+
+.agent-value a {
+    color: #2563eb; /* text-blue-600 */
+    word-break: break-all;
+    text-decoration: none;
+}
+
+.agent-value a:hover {
+    color: #1d4ed8; /* hover:text-blue-800 */
+    text-decoration: underline;
+}
+
+.agent-footer-note {
+    margin-top: 1rem; /* mt-4 */
+    font-size: 0.875rem; /* text-sm */
+    color: #8d1818; /* text-red-700 */
+}
+
+/* -------------------------------------------------------------------------- */
+/* Footer and Small Print */
+/* -------------------------------------------------------------------------- */
+
+.dmca-footer {
+    margin-top: 2rem; /* mt-8 */
+    padding-top: 1rem; /* pt-4 */
+    border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
+}
+
+.dmca-footer .small-print {
+    font-size: 0.875rem; /* text-sm */
+    color: #374151; /* text-gray-700 */
+}
+
+.dmca-footer .last-updated {
+    font-size: 0.875rem; /* text-sm */
+    color: #6b7280; /* text-gray-500 */
+    margin-top: 0.5rem;
+}

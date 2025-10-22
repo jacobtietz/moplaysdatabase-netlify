@@ -1,0 +1,68 @@
+/* src/css/EditPlay.css */
+
+.create-play-wrapper {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  font-family: "Inter", sans-serif;
+}
+
+.create-play-wrapper h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #262223;
+}
+
+.create-play-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-play-form input,
+.create-play-form textarea {
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.create-play-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.create-play-form button {
+  padding: 0.8rem;
+  background-color: #262223;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.create-play-form button:hover {
+  background-color: #444;
+}
+
+.message {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.message.success {
+  color: #155724;
+  background-color: #d4edda;
+}
+
+.message.error {
+  color: #721c24;
+  background-color: #f8d7da;
+}
