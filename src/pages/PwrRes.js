@@ -35,7 +35,7 @@ export default function ResetPassword() {
     setError("");
 
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/reset-password/${token}`, {
+      const res = await fetch(`https://moplaysdatabase.onrender.com/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // <--- allow cookies like Login.js
