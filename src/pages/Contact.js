@@ -10,10 +10,13 @@ const ContactUs = () => {
     message: ''
   });
   const [submissionStatus, setSubmissionStatus] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setErrorMsg('');
+    setSubmissionStatus(null);
   };
 
   const isEmailValid = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -29,6 +32,7 @@ const ContactUs = () => {
     setSubmissionStatus(null);
 
     if (!isFormValid()) {
+      setErrorMsg('Please fill all required fields correctly.');
       setSubmissionStatus('error');
       return;
     }
@@ -46,13 +50,16 @@ const ContactUs = () => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to send message.');
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message || 'Failed to send message.');
 
       setSubmissionStatus('success');
       setFormData({ firstName: '', lastName: '', mobileNo: '', emailAddress: '', message: '' });
     } catch (err) {
       console.error(err);
       setSubmissionStatus('error');
+      setErrorMsg(err.message || 'Server error. Please try again later.');
     }
   };
 
@@ -132,7 +139,7 @@ const ContactUs = () => {
           <button type="submit" disabled={!isFormValid()}>Send Message</button>
 
           {submissionStatus === 'success' && <div className="status-message success">Thank you! Your message has been sent successfully.</div>}
-          {submissionStatus === 'error' && <div className="status-message error">Please ensure all required fields are filled out correctly with a valid email.</div>}
+          {submissionStatus === 'error' && <div className="status-message error">{errorMsg}</div>}
         </form>
       </div>
     </div>
