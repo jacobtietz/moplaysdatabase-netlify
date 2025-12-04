@@ -458,3 +458,16 @@
 .reset-filters-btn:hover {
   background-color: #9e4522d3;
 }
+
+.admin-btn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  padding: 8px 12;
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

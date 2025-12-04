@@ -101,7 +101,7 @@ export default function PlaySearch() {
   }, [navigate, API_URL]);
 
   // ------------------- Populate search from URL -------------------
-useEffect(() => {
+  useEffect(() => {
     document.title = "MPDB";
 
     checkAuth();
@@ -112,8 +112,7 @@ useEffect(() => {
 
     // Use the page from URL, default to 1
     fetchPlays(parseInt(pageParam) || 1);
-}, [location.search, fetchPlays, checkAuth, pageParam]);
-
+  }, [location.search, fetchPlays, checkAuth, pageParam]);
 
   // ------------------- Global Enter Key Listener -------------------
   useEffect(() => {
@@ -180,7 +179,6 @@ useEffect(() => {
     if (newPage >= 1 && newPage <= totalPages && newPage !== page) fetchPlays(newPage);
   };
 
-  // ------------------- Reset Filters -------------------
   const resetFilters = () => {
     setSearch("");
     setGenre("");
@@ -204,6 +202,28 @@ useEffect(() => {
 
   return (
     <div className="play-search-wrapper">
+      {/* --- Admin Button --- */}
+      {user && user.account === 4 && (
+        <button
+          className="admin-btn"
+          onClick={() => navigate("/admin/users")}
+          style={{
+            position: "fixed",
+            top: "10px",
+            left: "10px",
+            zIndex: 1000,
+            padding: "8px 12px",
+            backgroundColor: "#ff4d4f",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Administration
+        </button>
+      )}
+
       <header className="mpdb-header">
         <div className="search-user-container">
           <div className="search-bar">
@@ -226,26 +246,21 @@ useEffect(() => {
                 {firstLetter}
               </div>
               <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
-{userMenuOpen && (
-  <div className="user-dropdown">
-    {/* Only show Profile for Playwright/Admin (account >= 2) */}
-    {user.account >= 2 && (
-      <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
-    )}
-    
-    {/* Settings and Logout always visible */}
-    <button onClick={() => navigate("/settings")}>Settings</button>
-    <button onClick={handleLogout}>Logout</button>
-  </div>
-)}
-
-              
+              {userMenuOpen && (
+                <div className="user-dropdown">
+                  {user.account >= 2 && (
+                    <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
+                  )}
+                  <button onClick={() => navigate("/settings")}>Settings</button>
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              )}
             </div>
           )}
         </div>
       </header>
 
-      {/* --- Filters --- */}
+      {/* --- Filters and Results --- */}
       <div className="search-filters">
         <select value={genre} onChange={(e) => setGenre(e.target.value)}>
           <option value="">Genre</option>
@@ -274,18 +289,17 @@ useEffect(() => {
         </select>
 
         <div className="filter-wrapper">
-          <button type="button" className="filter-btn" onClick={toggleFilterMenu}>
+          <button type="button" className="filter-btn" onClick={() => setFilterOpen(!filterOpen)}>
             <FaFilter /> More Filters
           </button>
 
           {filterOpen && (
             <div className="filter-dropdown expanded-large">
-              {/* Reset Button */}
               <button className="reset-filters-btn" onClick={resetFilters}>Reset</button>
               
               <h3>Advanced Filters</h3>
-
               <div className="advanced-grid">
+                {/* Advanced filter inputs */}
                 <div className="filter-section">
                   <h4>Publication Dates</h4>
                   <label>From:</label>
@@ -293,7 +307,6 @@ useEffect(() => {
                   <label>To:</label>
                   <input type="date" name="pubDateTo" value={advancedFilters.pubDateTo} onChange={handleAdvancedChange} />
                 </div>
-
                 <div className="filter-section">
                   <h4>Submission Dates</h4>
                   <label>From:</label>
@@ -301,7 +314,6 @@ useEffect(() => {
                   <label>To:</label>
                   <input type="date" name="subDateTo" value={advancedFilters.subDateTo} onChange={handleAdvancedChange} />
                 </div>
-
                 <div className="filter-section">
                   <h4>Duration (Minutes)</h4>
                   <label>Min:</label>
@@ -309,7 +321,6 @@ useEffect(() => {
                   <label>Max:</label>
                   <input type="number" name="maxDuration" placeholder="Max" value={advancedFilters.maxDuration} onChange={handleAdvancedChange} />
                 </div>
-
                 <div className="filter-section">
                   <h4>Cast Requirements</h4>
                   <label>Men:</label>
@@ -317,7 +328,6 @@ useEffect(() => {
                   <label>Women:</label>
                   <input type="number" name="females" placeholder="Women" value={advancedFilters.females} onChange={handleAdvancedChange} />
                 </div>
-
                 <div className="filter-section">
                   <h4>Acts</h4>
                   <label>Number of Acts:</label>
