@@ -147,6 +147,18 @@ export default function Settings() {
     setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
+  const fields = [
+    { label: "Phone", value: phone, setter: setPhone, key: "phone", type: "tel", placeholder: "+1 (555) 555-5555" },
+    { label: "Contact Form", value: contact, setter: setContact, key: "contact", type: "checkbox" },
+    { label: "Description", value: description, setter: setDescription, key: "description", type: "textarea" },
+    { label: "Biography", value: biography, setter: setBiography, key: "biography", type: "textarea" },
+    { label: "Company Name", value: companyName, setter: setCompanyName, key: "companyName", type: "text" },
+    { label: "Street", value: street, setter: setStreet, key: "street", type: "text" },
+    { label: "State & City", value: stateCity, setter: setStateCity, key: "stateCity", type: "text" },
+    { label: "Country", value: country, setter: setCountry, key: "country", type: "text" },
+    { label: "Website", value: website, setter: setWebsite, key: "website", type: "text", placeholder: "https://example.com" },
+  ];
+
   return (
     <div className="settings-wrapper">
       <header className="settings-header">
@@ -187,28 +199,9 @@ export default function Settings() {
             <label>Last Name</label>
             <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} maxLength={20} />
 
-            {/* Other fields with proper visibility labels */}
-            {[
-              { label: "Phone", value: phone, setter: setPhone, key: "phone", type: "tel", placeholder: "+1 (555) 555-5555" },
-              { label: "Contact Form Enable/Disable", value: contact, setter: setContact, key: "contact", type: "checkbox" },
-              { label: "Description", value: description, setter: setDescription, key: "description", type: "textarea" },
-              { label: "Biography", value: biography, setter: setBiography, key: "biography", type: "textarea" },
-              { label: "Company Name", value: companyName, setter: setCompanyName, key: "companyName", type: "text" },
-              { label: "Street", value: street, setter: setStreet, key: "street", type: "text" },
-              { label: "State & City", value: stateCity, setter: setStateCity, key: "stateCity", type: "text" },
-              { label: "Country", value: country, setter: setCountry, key: "country", type: "text" },
-              { label: "Website", value: website, setter: setWebsite, key: "website", type: "text", placeholder: "https://example.com" },
-            ].map((field) => (
+            {fields.map((field) => (
               <div className="field-line" key={field.key}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={visibility[field.key] || false}
-                    onChange={() => toggleVisibility(field.key)}
-                  />
-                  Show {field.label} on Profile
-                </label>
-
+                <label className="field-label">{field.label}</label>
                 {field.type === "textarea" ? (
                   <textarea value={field.value} onChange={(e) => field.setter(e.target.value)} maxLength={field.key === "description" ? 450 : 2000} />
                 ) : field.type === "checkbox" ? (
@@ -216,6 +209,12 @@ export default function Settings() {
                 ) : (
                   <input type={field.type} value={field.value} onChange={(e) => field.setter(e.target.value)} placeholder={field.placeholder || ""} />
                 )}
+                <input
+                  type="checkbox"
+                  className="visibility-checkbox"
+                  checked={visibility[field.key] || false}
+                  onChange={() => toggleVisibility(field.key)}
+                />
               </div>
             ))}
 
