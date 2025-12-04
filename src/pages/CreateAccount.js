@@ -10,10 +10,10 @@ export default function CreateAccount() {
     email: "",
     phone: "",
     password: "",
-    account: 0,
-    contact: 0,
-    schoolName: "",
-    over18: 0,
+    account: 0,      // 0 = normal, 1 = playwright
+    contact: 0,      // playwright contact option
+    over18: 0,       // required if playwright
+    schoolName: "",  // optional
   });
 
   const [error, setError] = useState("");
@@ -29,11 +29,19 @@ export default function CreateAccount() {
     const { id, value, type, checked } = e.target;
 
     if (type === "checkbox") {
-      setInputs(prev => ({ ...prev, [id]: checked ? 1 : 0 }));
+      // Playwright checkbox sets account type
+      if (id === "playwright") {
+        setInputs(prev => ({
+          ...prev,
+          account: checked ? 1 : 0,
+        }));
+      } else {
+        setInputs(prev => ({ ...prev, [id]: checked ? 1 : 0 }));
+      }
     } else {
       let newValue = value;
 
-      // Handle firstName / lastName
+      // Handle firstName / lastName formatting
       if (id === "firstName" || id === "lastName") {
         newValue = newValue.replace(/\s+/g, "");
         newValue = newValue.replace(/[^A-Za-z'-]/g, "");
@@ -66,11 +74,11 @@ export default function CreateAccount() {
     const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email);
     const phoneValid = /^\d{10,15}$/.test(inputs.phone);
     const passwordValid = inputs.password.length >= 8;
-    let roleValid = true;
-    if (inputs.account === 0) roleValid = inputs.schoolName.trim() !== "";
-    if (inputs.account === 1) roleValid = inputs.over18 === 1; // REQUIRED
 
-    return firstValid && lastValid && emailValid && phoneValid && passwordValid && roleValid;
+    let playwrightValid = true;
+    if (inputs.account === 1) playwrightValid = inputs.over18 === 1;
+
+    return firstValid && lastValid && emailValid && phoneValid && passwordValid && playwrightValid;
   };
 
   const handleSubmit = async (e) => {
@@ -82,11 +90,6 @@ export default function CreateAccount() {
 
     try {
       const payload = { ...inputs };
-      if (inputs.account === 0 && payload.schoolName.trim() === "") {
-        setError("Please enter your school/university name");
-        setLoading(false);
-        return;
-      }
 
       const res = await fetch("https://moplaysdatabase.onrender.com/api/auth/signup", {
         method: "POST",
@@ -113,6 +116,8 @@ export default function CreateAccount() {
     <div className="container">
       <div className="form-box">
         <form onSubmit={handleSubmit} noValidate>
+
+          {/* --- Name Fields --- */}
           <div className="input-group">
             <input
               id="firstName"
@@ -139,6 +144,7 @@ export default function CreateAccount() {
             {nameErrors.lastName && <div className="error-msg">{nameErrors.lastName}</div>}
           </div>
 
+          {/* --- Email/Phone/Password --- */}
           <div className="input-group">
             <input
               id="email"
@@ -175,70 +181,33 @@ export default function CreateAccount() {
             <label htmlFor="password">Password<span className="required-star">*</span></label>
           </div>
 
-          <div className="radio-group">
+          {/* --- School/University Optional --- */}
+          <div className="input-group">
             <input
-              type="radio"
-              id="account-educator"
-              name="account"
-              value={0}
-              checked={inputs.account === 0}
-              onChange={(e) => setInputs(prev => ({ ...prev, account: Number(e.target.value) }))}
+              id="schoolName"
+              type="text"
+              placeholder=" "
+              value={inputs.schoolName}
+              onChange={handleChange}
             />
-            <label htmlFor="account-educator">Educator</label>
-
-            <input
-              type="radio"
-              id="account-playwright"
-              name="account"
-              value={1}
-              checked={inputs.account === 1}
-              onChange={(e) => setInputs(prev => ({ ...prev, account: Number(e.target.value) }))}
-            />
-            <label htmlFor="account-playwright">Playwright</label>
+            <label htmlFor="schoolName">School/University (Optional)</label>
           </div>
 
-          {inputs.account === 0 && (
-            <div className="input-group">
+          {/* --- Playwright Checkbox --- */}
+          <div className="checkbox-group">
+            <label className="checkbox-item playwright-checkbox">
               <input
-                id="schoolName"
-                type="text"
-                placeholder=" "
-                value={inputs.schoolName}
+                type="checkbox"
+                id="playwright"
+                checked={inputs.account === 1}
                 onChange={handleChange}
-                required
               />
-              <label htmlFor="schoolName">School/University<span className="required-star">*</span></label>
-            </div>
-          )}
+              Are you a playwright?
+              <span className="info-icon" title="Selecting this allows you to post your works on our database."> ⓘ </span>
+            </label>
 
-          {inputs.account === 1 && (
-            <div className="checkbox-group">
-
-              {/* PLAYWRIGHT CHECKBOX */}
-              <label className="checkbox-item playwright-checkbox">
-                <input
-                  type="checkbox"
-                  id="contact"
-                  checked={inputs.contact === 1}
-                  onChange={handleChange}
-                />
-                Are you a playwright?
-
-                {/* Info icon */}
-                <span className="info-icon" title="If you wish to post your works on our database, you must select this box.">
-                      ⓘ
-                </span>
-              </label>
-
-              <p className="info-text">
-                When selected, we will verify your account within 24 hours.  
-                After verification, you can post your works on our site.  
-                Users will be able to contact you through our personal contact form,  
-                which hides your email unless you choose otherwise.  
-                You can disable all contact anytime in your account settings.
-              </p>
-
-              {/* 18+ CHECKBOX (Required) */}
+            {/* Over 18 Required if Playwright */}
+            {inputs.account === 1 && (
               <label className="checkbox-item">
                 <input
                   type="checkbox"
@@ -248,9 +217,21 @@ export default function CreateAccount() {
                 />
                 Are you 18 or older? <span className="required-star">*</span>
               </label>
+            )}
 
-            </div>
-          )}
+            {/* Optional contact checkbox */}
+            {inputs.account === 1 && (
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  id="contact"
+                  checked={inputs.contact === 1}
+                  onChange={handleChange}
+                />
+                Allow users to contact you
+              </label>
+            )}
+          </div>
 
           {error && <div className="error-msg">{error}</div>}
 
