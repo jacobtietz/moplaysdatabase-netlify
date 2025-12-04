@@ -1,3 +1,4 @@
+// src/pages/ContactThem.js
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../css/Contact.css";
@@ -60,14 +61,10 @@ const ContactThem = () => {
     }
 
     try {
-      const response = await axios.post(
+      // Only send the message; backend will use req.user info
+      await axios.post(
         `${API_URL}/api/contact/user/${id}`,
-        {
-          message,
-          fromName: `${currentUser.firstName} ${currentUser.lastName}`,
-          fromEmail: currentUser.email,
-          fromPhone: currentUser.phone,
-        },
+        { message },
         { withCredentials: true }
       );
 
