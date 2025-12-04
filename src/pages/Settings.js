@@ -62,18 +62,7 @@ export default function Settings() {
         setContact(u.contact || false);
 
         // Functional update to avoid ESLint warning
-        setVisibility(() => u.profile?.visibility || {
-          phone: false,
-          description: false,
-          biography: false,
-          companyName: false,
-          street: false,
-          stateCity: false,
-          country: false,
-          website: false,
-          contact: false,
-          profilePic: false,
-        });
+        setVisibility(() => u.profile?.visibility || visibility);
       } catch (err) {
         navigate("/login", { replace: true });
       } finally {
@@ -149,7 +138,9 @@ export default function Settings() {
   const restName = `${firstName.slice(1)} ${lastName}`;
 
   const profileFields = [
-    { label: "Phone", value: phone, setValue: setPhone, key: "phone", type: "text", placeholder: "+1 (555) 555-5555" },
+    { label: "First Name", value: firstName, setValue: setFirstName, key: "firstName", type: "text", noCheckbox: true },
+    { label: "Last Name", value: lastName, setValue: setLastName, key: "lastName", type: "text", noCheckbox: true },
+    { label: "Phone Number", value: phone, setValue: setPhone, key: "phone", type: "text", placeholder: "+1 (555) 555-5555" },
     { label: "Description", value: description, setValue: setDescription, key: "description", type: "textarea" },
     { label: "Biography", value: biography, setValue: setBiography, key: "biography", type: "textarea" },
     { label: "Company Name", value: companyName, setValue: setCompanyName, key: "companyName", type: "text" },
@@ -188,29 +179,8 @@ export default function Settings() {
           {profileFields.map((field) => (
             <div key={field.key} className="profile-field-row">
               <label>{field.label}</label>
-              {field.type === "textarea" ? (
-                <textarea
-                  value={field.value}
-                  onChange={(e) => field.setValue(e.target.value)}
-                />
-              ) : field.type === "checkbox" ? (
-                <input
-                  type="checkbox"
-                  checked={field.value}
-                  onChange={(e) => field.setValue(e.target.checked)}
-                />
-              ) : field.type === "file" ? (
-                <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
-              ) : (
-                <input
-                  type="text"
-                  value={field.value}
-                  placeholder={field.placeholder || ""}
-                  onChange={(e) => field.setValue(e.target.value)}
-                />
-              )}
-              {field.key !== "firstName" && field.key !== "lastName" && field.key !== "profilePic" && (
-                <div className="visibility-checkbox">
+              <div className="input-with-checkbox">
+                {!field.noCheckbox && (
                   <input
                     type="checkbox"
                     checked={visibility[field.key]}
@@ -218,9 +188,29 @@ export default function Settings() {
                       setVisibility((v) => ({ ...v, [field.key]: e.target.checked }))
                     }
                   />
-                  <span>Visible on profile</span>
-                </div>
-              )}
+                )}
+                {field.type === "textarea" ? (
+                  <textarea
+                    value={field.value}
+                    onChange={(e) => field.setValue(e.target.value)}
+                  />
+                ) : field.type === "checkbox" ? (
+                  <input
+                    type="checkbox"
+                    checked={field.value}
+                    onChange={(e) => field.setValue(e.target.checked)}
+                  />
+                ) : field.type === "file" ? (
+                  <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
+                ) : (
+                  <input
+                    type="text"
+                    value={field.value}
+                    placeholder={field.placeholder || ""}
+                    onChange={(e) => field.setValue(e.target.value)}
+                  />
+                )}
+              </div>
             </div>
           ))}
 
