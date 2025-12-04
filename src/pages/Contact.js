@@ -11,30 +11,31 @@ const ContactUs = () => {
     });
     const [submissionStatus, setSubmissionStatus] = useState(null); // 'success' or 'error'
 
-    // Validation state
-    const [isValid, setIsValid] = useState(false);
-
-    // Handle input changes
+    // Handlers
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Validate required fields
-    useEffect(() => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isFormValid =
+    // Helper: check if email is valid
+    const isEmailValid = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    };
+
+    // Form validation
+    const isFormValid = () => {
+        return (
             formData.firstName.trim() !== '' &&
             formData.lastName.trim() !== '' &&
-            emailRegex.test(formData.emailAddress) &&
-            formData.message.trim() !== '';
-        setIsValid(isFormValid);
-    }, [formData]);
+            isEmailValid(formData.emailAddress) &&
+            formData.message.trim() !== ''
+        );
+    };
 
-    // Submit form to backend
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!isValid) {
+
+        if (!isFormValid()) {
             setSubmissionStatus('error');
             return;
         }
@@ -45,13 +46,18 @@ const ContactUs = () => {
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    firstName: formData.firstName.trim(),
+                    lastName: formData.lastName.trim(),
+                    mobileNo: formData.mobileNo.trim(),
+                    emailAddress: formData.emailAddress.trim(),
+                    message: formData.message.trim(),
+                }),
             });
 
             if (!response.ok) throw new Error('Failed to send message.');
 
             setSubmissionStatus('success');
-            // Reset fields after successful submission
             setFormData({ firstName: '', lastName: '', mobileNo: '', emailAddress: '', message: '' });
         } catch (err) {
             console.error('Contact form error:', err);
@@ -117,7 +123,7 @@ const ContactUs = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="mobileNo" className="form-label">Mobile Number</label>
+                            <label htmlFor="mobileNo" className="form-label">Mobile Number (optional)</label>
                             <input 
                                 id="mobileNo"
                                 type="tel"
@@ -125,7 +131,6 @@ const ContactUs = () => {
                                 value={formData.mobileNo}
                                 onChange={handleChange}
                                 className="form-input"
-                                placeholder="Optional"
                             />
                         </div>
                     </div>
@@ -145,7 +150,7 @@ const ContactUs = () => {
                     <button 
                         type="submit" 
                         className="submit-button"
-                        disabled={!isValid}
+                        disabled={!isFormValid()}
                     >
                         Send Message
                     </button>
