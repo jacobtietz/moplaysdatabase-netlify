@@ -178,6 +178,26 @@ export default function PlaySearch() {
     if (newPage >= 1 && newPage <= totalPages && newPage !== page) fetchPlays(newPage);
   };
 
+  // ------------------- Reset Filters -------------------
+  const resetFilters = () => {
+    setSearch("");
+    setGenre("");
+    setFundingType("");
+    setOrganizationType("");
+    setAdvancedFilters({
+      pubDateFrom: "",
+      pubDateTo: "",
+      subDateFrom: "",
+      subDateTo: "",
+      minDuration: "",
+      maxDuration: "",
+      males: "",
+      females: "",
+      acts: "",
+    });
+    fetchPlays(1);
+  };
+
   const shownResults = Math.min(page * 10, totalResults);
 
   return (
@@ -251,6 +271,9 @@ export default function PlaySearch() {
 
           {filterOpen && (
             <div className="filter-dropdown expanded-large">
+              {/* Reset Button */}
+              <button className="reset-filters-btn" onClick={resetFilters}>Reset</button>
+              
               <h3>Advanced Filters</h3>
 
               <div className="advanced-grid">
@@ -350,7 +373,6 @@ export default function PlaySearch() {
                     )}
                   </p>
 
-                  {/* Updated line to include organization type next to actors */}
                   <p className="play-details">
                     {play.genre || "-"} | {play.duration || 0} Minutes | {play.males || 0} M, {play.females || 0} W | {play.total || 0} Total Actors | {play.organizationType || "-"}
                   </p>
