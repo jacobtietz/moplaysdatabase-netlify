@@ -32,7 +32,7 @@ const ContactUs = () => {
         setIsValid(isFormValid);
     }, [formData]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isValid) {
             setSubmissionStatus('error');
@@ -41,12 +41,21 @@ const ContactUs = () => {
 
         setSubmissionStatus(null);
 
-        // Simulate API call
-        setTimeout(() => {
-            console.log("Form Submitted:", formData);
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) throw new Error('Failed to send message.');
+
             setSubmissionStatus('success');
             setFormData({ firstName: '', lastName: '', mobileNo: '', emailAddress: '', message: '' });
-        }, 1500);
+        } catch (err) {
+            console.error('Contact form error:', err);
+            setSubmissionStatus('error');
+        }
     };
 
     useEffect(() => {
@@ -60,8 +69,7 @@ const ContactUs = () => {
                 {/* Header */}
                 <header className="contact-header">
                     <h1>Contact Us</h1>
-                    <p className="subtitle">
-                    </p>
+                    <p className="subtitle">We’d love to hear from you. Send us a message!</p>
                 </header>
                 
                 {/* Contact Form */}
@@ -116,7 +124,6 @@ const ContactUs = () => {
                                 value={formData.mobileNo}
                                 onChange={handleChange}
                                 className="form-input"
-                                required
                             />
                         </div>
                     </div>
@@ -138,7 +145,7 @@ const ContactUs = () => {
                         className="submit-button"
                         disabled={!isValid}
                     >
-                        {submissionStatus === null && !isValid ? 'Send Message' : 'Send Message'}
+                        Send Message
                     </button>
 
                     {submissionStatus === 'success' && (
