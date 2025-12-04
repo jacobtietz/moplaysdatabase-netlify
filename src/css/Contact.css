@@ -1,139 +1,119 @@
 /* src/css/Contact.css */
 
-/* ----------------- Page Container ----------------- */
 .contact-page-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 3rem 1rem;
-    background: #f4f6f8;
-    min-height: 100vh;
-    font-family: 'Inter', sans-serif;
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  font-family: "Inter", sans-serif;
 }
 
-/* ----------------- Contact Card ----------------- */
 .contact-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 600px;
-}
-
-/* ----------------- Header ----------------- */
-.contact-header {
-    text-align: center;
-    margin-bottom: 2rem;
+  background-color: #f3f3f3;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .contact-header h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    color: #111827;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #262223;
 }
 
 .contact-header .subtitle {
-    font-size: 0.95rem;
-    color: #6b7280;
+  text-align: center;
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
 }
 
-/* ----------------- Form Grid ----------------- */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
 .form-grid {
-    display: grid;
-    gap: 1rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .form-grid.two-cols {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 1fr 1fr;
 }
 
-/* ----------------- Form Group ----------------- */
 .form-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
 }
 
-.form-label {
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #374151;
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
 }
 
-.form-input,
-.form-textarea {
-    padding: 0.65rem 0.8rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+.form-group input,
+.form-group textarea {
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border 0.2s;
 }
 
-.form-input:focus,
-.form-textarea:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-    outline: none;
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #262223;
 }
 
-.form-textarea {
-    min-height: 120px;
-    resize: vertical;
+textarea {
+  min-height: 100px;
+  resize: vertical;
 }
 
-/* ----------------- Submit Button ----------------- */
-.submit-button {
-    background-color: #2563eb;
-    color: #fff;
-    font-weight: 600;
-    padding: 0.75rem 1.25rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    width: 100%;
-    margin-top: 1rem;
+button[type="submit"] {
+  padding: 0.8rem;
+  background-color: #262223;
+  color: #fff;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
 }
 
-.submit-button:disabled {
-    background-color: #9ca3af;
-    cursor: not-allowed;
+button[type="submit"]:hover {
+  background-color: #444;
 }
 
-.submit-button:hover:not(:disabled) {
-    background-color: #1e40af;
-    transform: translateY(-1px);
+button[disabled] {
+  background-color: #999;
+  cursor: not-allowed;
 }
 
-/* ----------------- Status Messages ----------------- */
 .status-message {
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    text-align: center;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 5px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .status-message.success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #10b981;
+  background-color: #d4edda;
+  color: #155724;
 }
 
 .status-message.error {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #ef4444;
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
-/* ----------------- Responsive Adjustments ----------------- */
-@media (max-width: 480px) {
-    .contact-card {
-        padding: 2rem 1.5rem;
-    }
-
-    .form-grid.two-cols {
-        grid-template-columns: 1fr;
-    }
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .form-grid.two-cols {
+    grid-template-columns: 1fr;
+  }
 }
