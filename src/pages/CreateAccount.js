@@ -225,8 +225,8 @@ export default function CreateAccount() {
                 Are you a playwright?
 
                 {/* Info icon */}
-                <span className="info-icon" title="Selecting this is the path to allowing you to post your works on our website. After selecting it, your account will be verified within ~24 hours. Once verified, you may publish your works. Users may contact you using our personal contact form (your actual email stays hidden unless you choose otherwise). You may disable contact entirely in your account settings at any time.">
-                  ⓘ
+                <span className="info-icon" title="If you wish to post your works on our database, you must select this box.">
+                      ⓘ
                 </span>
               </label>
 
