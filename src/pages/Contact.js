@@ -32,42 +32,50 @@ const ContactUs = () => {
     isEmailValid(formData.emailAddress) &&
     formData.message.trim() !== "";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmissionStatus(null);
-    setErrorMsg("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSubmissionStatus(null);
+  setErrorMsg("");
 
-    if (!isFormValid()) {
-      setErrorMsg("Please fill all required fields correctly.");
-      setSubmissionStatus("error");
-      return;
-    }
+  if (!isFormValid()) {
+    setErrorMsg("Please fill all required fields correctly.");
+    setSubmissionStatus("error");
+    return;
+  }
 
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    // safely parse response
+    let data;
+    const text = await response.text();
     try {
-      const response = await fetch(`${BACKEND_URL}/api/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || "Failed to send message.");
-
-      setSubmissionStatus("success");
-      setFormData({
-        firstName: "",
-        lastName: "",
-        mobileNo: "",
-        emailAddress: "",
-        message: "",
-      });
-    } catch (err) {
-      console.error(err);
-      setSubmissionStatus("error");
-      setErrorMsg(err.message || "Server error. Please try again later.");
+      data = JSON.parse(text);
+    } catch {
+      data = { message: text };
     }
-  };
+
+    if (!response.ok) throw new Error(data.message || "Failed to send message.");
+
+    setSubmissionStatus("success");
+    setFormData({
+      firstName: "",
+      lastName: "",
+      mobileNo: "",
+      emailAddress: "",
+      message: "",
+    });
+  } catch (err) {
+    console.error(err);
+    setSubmissionStatus("error");
+    setErrorMsg(err.message || "Server error. Please try again later.");
+  }
+};
+
 
   useEffect(() => {
     document.title = "Contact – MPDB";
