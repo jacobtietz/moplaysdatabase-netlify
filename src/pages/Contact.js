@@ -1,69 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import '../css/Contact.css';
+// src/pages/Contact.js
+import React, { useState, useEffect } from "react";
+import "../css/Contact.css";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    mobileNo: '',
-    emailAddress: '',
-    message: ''
+    firstName: "",
+    lastName: "",
+    mobileNo: "",
+    emailAddress: "",
+    message: "",
   });
   const [submissionStatus, setSubmissionStatus] = useState(null);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+  // Use environment variable or fallback
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrorMsg('');
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrorMsg("");
     setSubmissionStatus(null);
   };
 
-  const isEmailValid = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const isEmailValid = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   const isFormValid = () =>
-    formData.firstName.trim() !== '' &&
-    formData.lastName.trim() !== '' &&
+    formData.firstName.trim() !== "" &&
+    formData.lastName.trim() !== "" &&
     isEmailValid(formData.emailAddress) &&
-    formData.message.trim() !== '';
+    formData.message.trim() !== "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionStatus(null);
-    setErrorMsg('');
+    setErrorMsg("");
 
     if (!isFormValid()) {
-      setErrorMsg('Please fill all required fields correctly.');
-      setSubmissionStatus('error');
+      setErrorMsg("Please fill all required fields correctly.");
+      setSubmissionStatus("error");
       return;
     }
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      // Safely handle JSON or plain text
-      const text = await response.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = { message: text };
-      }
+      const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || 'Failed to send message.');
+      if (!response.ok) throw new Error(data.message || "Failed to send message.");
 
-      setSubmissionStatus('success');
-      setFormData({ firstName: '', lastName: '', mobileNo: '', emailAddress: '', message: '' });
+      setSubmissionStatus("success");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        mobileNo: "",
+        emailAddress: "",
+        message: "",
+      });
     } catch (err) {
       console.error(err);
-      setSubmissionStatus('error');
-      setErrorMsg(err.message || 'Server error. Please try again later.');
+      setSubmissionStatus("error");
+      setErrorMsg(err.message || "Server error. Please try again later.");
     }
   };
 
@@ -140,14 +142,16 @@ const ContactUs = () => {
             />
           </div>
 
-          <button type="submit" disabled={!isFormValid()}>Send Message</button>
+          <button type="submit" disabled={!isFormValid()}>
+            Send Message
+          </button>
 
-          {submissionStatus === 'success' && (
+          {submissionStatus === "success" && (
             <div className="status-message success">
               Thank you! Your message has been sent successfully.
             </div>
           )}
-          {submissionStatus === 'error' && (
+          {submissionStatus === "error" && (
             <div className="status-message error">{errorMsg}</div>
           )}
         </form>
