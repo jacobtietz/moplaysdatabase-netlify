@@ -1,3 +1,4 @@
+// src/pages/Profile.js
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../css/Profile.css";
@@ -85,7 +86,6 @@ export default function Profile() {
   if (!user) return <p>User not found.</p>;
 
   const profile = user.profile || {};
-
   const firstLetter = currentUser?.firstName?.charAt(0) || "";
   const restName = currentUser ? `${currentUser.firstName.slice(1)} ${currentUser.lastName}` : "";
 
@@ -103,21 +103,17 @@ export default function Profile() {
             </div>
             <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
 
-{userMenuOpen && (
-  <div className="user-dropdown">
-    {currentUser?.account >= 2 && (
-      <button onClick={() => navigate(`/profile/${currentUser._id}`)}>
-        Profile
-      </button>
-    )}
-
-    <button onClick={() => navigate("/settings")}>Settings</button>
-    <button onClick={handleLogout}>Logout</button>
-  </div>
-)}
-
-
-
+            {userMenuOpen && (
+              <div className="user-dropdown">
+                {currentUser?.account >= 2 && (
+                  <button onClick={() => navigate(`/profile/${currentUser._id}`)}>
+                    Profile
+                  </button>
+                )}
+                <button onClick={() => navigate("/settings")}>Settings</button>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
           </div>
         )}
       </header>
@@ -141,23 +137,29 @@ export default function Profile() {
 
         <hr className="divider" />
 
-<div className="profile-links">
-  <a
-    className="profile-link"
-    href={`/plays?search=${encodeURIComponent(`${user.firstName} ${user.lastName}`)}`}
-  >
-    view plays »
-  </a>
-  <span className="link-divider">|</span>
-  {currentUser?.account > 1 && (
-    <>
-      <a href="/plays/create" className="profile-link">submit your play »</a>
-      <span className="link-divider">|</span>
-    </>
-  )}
-  <a href="/contact" className="profile-link">contact »</a>
-</div>
-
+        <div className="profile-links">
+          <a
+            className="profile-link"
+            href={`/plays?search=${encodeURIComponent(`${user.firstName} ${user.lastName}`)}`}
+          >
+            view plays »
+          </a>
+          <span className="link-divider">|</span>
+          {currentUser?.account > 1 && (
+            <>
+              <a href="/plays/create" className="profile-link">submit your play »</a>
+              <span className="link-divider">|</span>
+            </>
+          )}
+          {/* Updated contact link to go to ContactThem page for this user's ID */}
+          <span
+            className="profile-link"
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+            onClick={() => navigate(`/contact/${user._id}`)}
+          >
+            contact »
+          </span>
+        </div>
 
         <hr className="divider" />
       </section>
