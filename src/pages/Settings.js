@@ -32,6 +32,7 @@ export default function Settings() {
     country: false,
     website: false,
     contact: false,
+    profilePic: false,
   });
 
   const menuRef = useRef(null);
@@ -40,10 +41,12 @@ export default function Settings() {
 
   useEffect(() => {
     document.title = "Settings – MPDB";
+
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
         if (!res.data.user) throw new Error("Not authenticated");
+
         const u = res.data.user;
         setUser(u);
         setFirstName(u.firstName || "");
@@ -58,24 +61,14 @@ export default function Settings() {
         setCountry(u.profile?.country || "");
         setWebsite(u.profile?.website || "");
         setContact(u.contact || false);
-
-        setVisibility(u.profile?.visibility || {
-          phone: false,
-          description: false,
-          biography: false,
-          companyName: false,
-          street: false,
-          stateCity: false,
-          country: false,
-          website: false,
-          contact: false,
-        });
+        setVisibility(u.profile?.visibility || visibility);
       } catch (err) {
         navigate("/login", { replace: true });
       } finally {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, [navigate, API_URL]);
 
@@ -109,6 +102,10 @@ export default function Settings() {
     }
   };
 
+  const toggleVisibility = (field) => {
+    setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
   const handleSave = async () => {
     try {
       const formData = new FormData();
@@ -126,9 +123,7 @@ export default function Settings() {
       formData.append("visibility", JSON.stringify(visibility));
       if (profilePic) formData.append("profilePicture", profilePic);
 
-      const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
-        withCredentials: true,
-      });
+      const res = await axios.put(`${API_URL}/api/users/profile`, formData, { withCredentials: true });
       alert("Profile updated!");
       setUser(res.data.user);
     } catch (err) {
@@ -142,10 +137,6 @@ export default function Settings() {
 
   const firstLetter = firstName.charAt(0);
   const restName = `${firstName.slice(1)} ${lastName}`;
-
-  const toggleVisibility = (field) => {
-    setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
 
   const fields = [
     { label: "Phone", value: phone, setter: setPhone, key: "phone", type: "tel", placeholder: "+1 (555) 555-5555" },
@@ -189,10 +180,13 @@ export default function Settings() {
               alt="Profile"
             />
             <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
+            <div className="visibility-container">
+              <label>Profile Picture</label>
+              <input type="checkbox" checked={visibility.profilePic} onChange={() => toggleVisibility("profilePic")} />
+            </div>
           </div>
 
           <div className="profile-fields">
-            {/* Always visible: first/last name */}
             <label>First Name</label>
             <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} maxLength={20} />
 
@@ -209,12 +203,10 @@ export default function Settings() {
                 ) : (
                   <input type={field.type} value={field.value} onChange={(e) => field.setter(e.target.value)} placeholder={field.placeholder || ""} />
                 )}
-                <input
-                  type="checkbox"
-                  className="visibility-checkbox"
-                  checked={visibility[field.key] || false}
-                  onChange={() => toggleVisibility(field.key)}
-                />
+                <div className="visibility-container">
+                  <label>Visible on Profile</label>
+                  <input type="checkbox" checked={visibility[field.key] || false} onChange={() => toggleVisibility(field.key)} />
+                </div>
               </div>
             ))}
 
