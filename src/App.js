@@ -10,6 +10,7 @@ import Cookies from "./pages/Cookies";
 import Privacy from "./pages/Privacy";
 import DMCA from "./pages/DMCA";
 import Contact from "./pages/Contact";
+import ContactThem from "./pages/ContactThem"; // <-- new page
 import PlaySearch from "./pages/PlaySearch";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
@@ -39,6 +40,14 @@ export default function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/dmca" element={<DMCA />} />
             <Route path="/contact" element={<Contact />} />
+            <Route
+              path="/contact/:id"
+              element={
+                <PrivateRoute>
+                  <ContactThem />
+                </PrivateRoute>
+              }
+            />
 
             {/* Protected routes */}
             <Route
@@ -65,11 +74,14 @@ export default function App() {
                 </PrivateRoute>
               }
             />
-            <Route path="/plays/create" element={
-              <PrivateRoute>
-                <CreatePlay />
-              </PrivateRoute>
-            } />
+            <Route
+              path="/plays/create"
+              element={
+                <PrivateRoute>
+                  <CreatePlay />
+                </PrivateRoute>
+              }
+            />
 
             <Route
               path="/profile"

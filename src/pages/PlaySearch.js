@@ -101,7 +101,7 @@ export default function PlaySearch() {
   }, [navigate, API_URL]);
 
   // ------------------- Populate search from URL -------------------
-  useEffect(() => {
+useEffect(() => {
     document.title = "MPDB";
 
     checkAuth();
@@ -110,8 +110,10 @@ export default function PlaySearch() {
     const searchQuery = params.get("search") || "";
     setSearch(searchQuery);
 
-    fetchPlays(1);
-  }, [location.search, fetchPlays, checkAuth]);
+    // Use the page from URL, default to 1
+    fetchPlays(parseInt(pageParam) || 1);
+}, [location.search, fetchPlays, checkAuth, pageParam]);
+
 
   // ------------------- Global Enter Key Listener -------------------
   useEffect(() => {
