@@ -103,18 +103,14 @@ export default function Profile() {
             </div>
             <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
 
-{userMenuOpen && (
+{userMenuOpen && currentUser?.account >= 2 && (
   <div className="user-dropdown">
-    {/* Only show Profile for Playwright/Admin (account >= 2) */}
-    {user.account >= 2 && (
-      <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
-    )}
-    
-    {/* Settings and Logout always visible */}
+    <button onClick={() => navigate(`/profile/${currentUser._id}`)}>Profile</button>
     <button onClick={() => navigate("/settings")}>Settings</button>
     <button onClick={handleLogout}>Logout</button>
   </div>
 )}
+
           </div>
         )}
       </header>
@@ -146,7 +142,7 @@ export default function Profile() {
     view plays »
   </a>
   <span className="link-divider">|</span>
-  {currentUser?.account !== 0 && (
+  {currentUser?.account > 1 && (
     <>
       <a href="/plays/create" className="profile-link">submit your play »</a>
       <span className="link-divider">|</span>
