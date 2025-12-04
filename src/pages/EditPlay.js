@@ -276,12 +276,12 @@ export default function EditPlay() {
             onChange={handleChange}
             required
           >
-            <option value="School">School</option>
+            <option value="Elementary">Elementary</option>
+            <option value="Middle School">Middle School</option>
+            <option value="High School">High School</option>
+            <option value="University">University</option>
             <option value="Community">Community</option>
             <option value="Professional">Professional</option>
-            <option value="University">University</option>
-            <option value="Youth">Youth</option>
-            <option value="Other">Other</option>
           </select>
 
           <label>Genre</label>

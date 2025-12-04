@@ -217,10 +217,12 @@ export default function PlaySearch() {
         </select>
         <select value={organizationType} onChange={(e) => setOrganizationType(e.target.value)}>
           <option value="">Organization Type</option>
-          <option value="elementary">Elementary</option>
-          <option value="middleschool">Middle School</option>
-          <option value="highschool">High School</option>
-          <option value="university">University</option>
+            <option value="Elementary">Elementary</option>
+            <option value="Middle School">Middle School</option>
+            <option value="High School">High School</option>
+            <option value="University">University</option>
+            <option value="Community">Community</option>
+            <option value="Professional">Professional</option>
         </select>
 
         <div className="filter-wrapper">
