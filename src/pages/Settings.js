@@ -22,24 +22,10 @@ export default function Settings() {
   const [website, setWebsite] = useState("");
   const [contact, setContact] = useState(false);
 
-  const [visibility, setVisibility] = useState({
-    phone: false,
-    description: false,
-    biography: false,
-    companyName: false,
-    street: false,
-    stateCity: false,
-    country: false,
-    website: false,
-    contact: false,
-    profilePic: false,
-  });
-
   const menuRef = useRef(null);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // ------------------- Fetch User -------------------
   useEffect(() => {
     document.title = "Settings – MPDB";
     const fetchUser = async () => {
@@ -60,9 +46,6 @@ export default function Settings() {
         setCountry(u.profile?.country || "");
         setWebsite(u.profile?.website || "");
         setContact(u.contact || false);
-
-        // Functional update to avoid ESLint warning
-        setVisibility(() => u.profile?.visibility || visibility);
       } catch (err) {
         navigate("/login", { replace: true });
       } finally {
@@ -72,7 +55,6 @@ export default function Settings() {
     fetchUser();
   }, [navigate, API_URL]);
 
-  // ------------------- Click Outside Menu -------------------
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -117,7 +99,6 @@ export default function Settings() {
       formData.append("country", country);
       formData.append("website", website);
       formData.append("contact", contact);
-      formData.append("visibility", JSON.stringify(visibility));
       if (profilePic) formData.append("profilePicture", profilePic);
 
       const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
@@ -137,31 +118,18 @@ export default function Settings() {
   const firstLetter = firstName.charAt(0);
   const restName = `${firstName.slice(1)} ${lastName}`;
 
-  const profileFields = [
-    { label: "First Name", value: firstName, setValue: setFirstName, key: "firstName", type: "text", noCheckbox: true },
-    { label: "Last Name", value: lastName, setValue: setLastName, key: "lastName", type: "text", noCheckbox: true },
-    { label: "Phone Number", value: phone, setValue: setPhone, key: "phone", type: "text", placeholder: "+1 (555) 555-5555" },
-    { label: "Description", value: description, setValue: setDescription, key: "description", type: "textarea" },
-    { label: "Biography", value: biography, setValue: setBiography, key: "biography", type: "textarea" },
-    { label: "Company Name", value: companyName, setValue: setCompanyName, key: "companyName", type: "text" },
-    { label: "Street", value: street, setValue: setStreet, key: "street", type: "text" },
-    { label: "State & City", value: stateCity, setValue: setStateCity, key: "stateCity", type: "text" },
-    { label: "Country", value: country, setValue: setCountry, key: "country", type: "text" },
-    { label: "Website", value: website, setValue: setWebsite, key: "website", type: "text", placeholder: "https://example.com" },
-    { label: "Contact Form Enable/Disable", value: contact, setValue: setContact, key: "contact", type: "checkbox" },
-    { label: "Profile Picture", value: profilePic, setValue: setProfilePic, key: "profilePic", type: "file" },
-  ];
-
   return (
     <div className="settings-wrapper">
       <header className="settings-header">
         <h1>Settings</h1>
         <div className="user-section" ref={menuRef}>
-          <div className="user-icon-circle" onClick={() => setUserMenuOpen(!userMenuOpen)}>
+          <div
+            className="user-icon-circle"
+            onClick={() => setUserMenuOpen(!userMenuOpen)}
+          >
             {firstLetter}
           </div>
           <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
-
           {userMenuOpen && (
             <div className="user-dropdown">
               <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
@@ -176,45 +144,54 @@ export default function Settings() {
         <div className="profile-editor">
           <h2>Profile</h2>
 
-          {profileFields.map((field) => (
-            <div key={field.key} className="profile-field-row">
-              <label>{field.label}</label>
-              <div className="input-with-checkbox">
-                {!field.noCheckbox && (
-                  <input
-                    type="checkbox"
-                    checked={visibility[field.key]}
-                    onChange={(e) =>
-                      setVisibility((v) => ({ ...v, [field.key]: e.target.checked }))
-                    }
-                  />
-                )}
-                {field.type === "textarea" ? (
-                  <textarea
-                    value={field.value}
-                    onChange={(e) => field.setValue(e.target.value)}
-                  />
-                ) : field.type === "checkbox" ? (
-                  <input
-                    type="checkbox"
-                    checked={field.value}
-                    onChange={(e) => field.setValue(e.target.checked)}
-                  />
-                ) : field.type === "file" ? (
-                  <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
-                ) : (
-                  <input
-                    type="text"
-                    value={field.value}
-                    placeholder={field.placeholder || ""}
-                    onChange={(e) => field.setValue(e.target.value)}
-                  />
-                )}
-              </div>
-            </div>
-          ))}
+          <div className="profile-pic-preview">
+            <img
+              src={profilePic instanceof File ? URL.createObjectURL(profilePic) : profilePic || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
+              alt="Profile"
+            />
+            <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
+          </div>
 
-          <button className="save-btn" onClick={handleSave}>Save Changes</button>
+          <div className="profile-fields">
+            <label>First Name</label>
+            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} maxLength={20} />
+
+            <label>Last Name</label>
+            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} maxLength={20} />
+
+            <label>Phone</label>
+            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+1 (555) 555-5555" />
+
+            <label>Description</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={450} />
+
+            <label>Biography</label>
+            <textarea value={biography} onChange={(e) => setBiography(e.target.value)} maxLength={2000} />
+
+            <label>Company Name</label>
+            <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} maxLength={100} />
+
+            <label>Street</label>
+            <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} maxLength={100} />
+
+            <label>State & City</label>
+            <input type="text" value={stateCity} onChange={(e) => setStateCity(e.target.value)} maxLength={100} />
+
+            <label>Country</label>
+            <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} maxLength={50} />
+
+            <label>Website</label>
+            <input type="text" value={website} onChange={(e) => setWebsite(e.target.value)} maxLength={200} placeholder="https://example.com" />
+
+            <div className="checkbox-container">
+              <label>
+                <input type="checkbox" checked={contact} onChange={(e) => setContact(e.target.checked)} />
+                Enable Contact Form
+              </label>
+            </div>
+
+            <button className="save-btn" onClick={handleSave}>Save Changes</button>
+          </div>
         </div>
       </main>
     </div>
