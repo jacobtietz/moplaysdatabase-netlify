@@ -14,24 +14,24 @@ const ContactUs = () => {
     // Validation state
     const [isValid, setIsValid] = useState(false);
 
-    // Handlers
+    // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Validate all fields
+    // Validate required fields
     useEffect(() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const isFormValid =
-    formData.firstName.trim() !== '' &&
-    formData.lastName.trim() !== '' &&
-    emailRegex.test(formData.emailAddress) &&
-    formData.message.trim() !== '';
-
+        const isFormValid =
+            formData.firstName.trim() !== '' &&
+            formData.lastName.trim() !== '' &&
+            emailRegex.test(formData.emailAddress) &&
+            formData.message.trim() !== '';
         setIsValid(isFormValid);
     }, [formData]);
 
+    // Submit form to backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isValid) {
@@ -51,6 +51,7 @@ const isFormValid =
             if (!response.ok) throw new Error('Failed to send message.');
 
             setSubmissionStatus('success');
+            // Reset fields after successful submission
             setFormData({ firstName: '', lastName: '', mobileNo: '', emailAddress: '', message: '' });
         } catch (err) {
             console.error('Contact form error:', err);
@@ -124,6 +125,7 @@ const isFormValid =
                                 value={formData.mobileNo}
                                 onChange={handleChange}
                                 className="form-input"
+                                placeholder="Optional"
                             />
                         </div>
                     </div>
@@ -155,7 +157,7 @@ const isFormValid =
                     )}
                     {submissionStatus === 'error' && (
                         <div className="status-message error">
-                            Please ensure all fields are filled out correctly with a valid email.
+                            Please ensure all required fields are filled out correctly with a valid email.
                         </div>
                     )}
                 </form>
