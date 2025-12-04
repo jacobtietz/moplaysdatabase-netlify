@@ -12,6 +12,8 @@ const ContactUs = () => {
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
 
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000';
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -39,18 +41,19 @@ const ContactUs = () => {
     }
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(`${BACKEND_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      const text = await response.text(); // first get raw text
+      // Safely handle JSON or plain text
+      const text = await response.text();
       let data;
       try {
-        data = JSON.parse(text); // try parsing JSON
+        data = JSON.parse(text);
       } catch {
-        data = { message: text }; // fallback to text
+        data = { message: text };
       }
 
       if (!response.ok) throw new Error(data.message || 'Failed to send message.');
@@ -139,8 +142,14 @@ const ContactUs = () => {
 
           <button type="submit" disabled={!isFormValid()}>Send Message</button>
 
-          {submissionStatus === 'success' && <div className="status-message success">Thank you! Your message has been sent successfully.</div>}
-          {submissionStatus === 'error' && <div className="status-message error">{errorMsg}</div>}
+          {submissionStatus === 'success' && (
+            <div className="status-message success">
+              Thank you! Your message has been sent successfully.
+            </div>
+          )}
+          {submissionStatus === 'error' && (
+            <div className="status-message error">{errorMsg}</div>
+          )}
         </form>
       </div>
     </div>
