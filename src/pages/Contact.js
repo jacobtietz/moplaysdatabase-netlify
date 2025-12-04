@@ -23,12 +23,12 @@ const ContactUs = () => {
     // Validate all fields
     useEffect(() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isFormValid =
-            formData.firstName.trim() !== '' &&
-            formData.lastName.trim() !== '' &&
-            formData.mobileNo.trim() !== '' &&
-            emailRegex.test(formData.emailAddress) &&
-            formData.message.trim() !== '';
+const isFormValid =
+    formData.firstName.trim() !== '' &&
+    formData.lastName.trim() !== '' &&
+    emailRegex.test(formData.emailAddress) &&
+    formData.message.trim() !== '';
+
         setIsValid(isFormValid);
     }, [formData]);
 
