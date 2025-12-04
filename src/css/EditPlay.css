@@ -16,18 +16,34 @@
   color: #262223;
 }
 
+/* Form layout */
 .create-play-form {
   display: flex;
   flex-direction: column;
 }
 
+/* Labels */
+.create-play-form label {
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  color: #262223;
+}
+
+/* Inputs, Textareas, Selects */
 .create-play-form input,
-.create-play-form textarea {
+.create-play-form textarea,
+.create-play-form select {
   margin-bottom: 1rem;
   padding: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
+  font-family: "Inter", sans-serif;
+  background-color: #fff;
+  color: #262223;
+  box-sizing: border-box;
+  appearance: none; /* remove default arrow on some browsers for select */
 }
 
 .create-play-form textarea {
@@ -35,6 +51,7 @@
   min-height: 80px;
 }
 
+/* Buttons */
 .create-play-form button {
   padding: 0.8rem;
   background-color: #262223;
@@ -50,6 +67,23 @@
   background-color: #444;
 }
 
+/* Image preview */
+.image-preview {
+  width: 200px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.image-preview img {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Message styling */
 .message {
   text-align: center;
   margin-bottom: 1rem;
