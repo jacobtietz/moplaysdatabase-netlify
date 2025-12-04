@@ -68,7 +68,7 @@ export default function CreateAccount() {
     const passwordValid = inputs.password.length >= 8;
     let roleValid = true;
     if (inputs.account === 0) roleValid = inputs.schoolName.trim() !== "";
-    if (inputs.account === 1) roleValid = inputs.over18 === 1;
+    if (inputs.account === 1) roleValid = inputs.over18 === 1; // REQUIRED
 
     return firstValid && lastValid && emailValid && phoneValid && passwordValid && roleValid;
   };
@@ -175,45 +175,82 @@ export default function CreateAccount() {
             <label htmlFor="password">Password<span className="required-star">*</span></label>
           </div>
 
-          {/* REMOVED RADIO BUTTONS — keeping account logic unchanged */}
-
-          {/* Always show schoolName */}
-          <div className="input-group">
+          <div className="radio-group">
             <input
-              id="schoolName"
-              type="text"
-              placeholder=" "
-              value={inputs.schoolName}
-              onChange={handleChange}
+              type="radio"
+              id="account-educator"
+              name="account"
+              value={0}
+              checked={inputs.account === 0}
+              onChange={(e) => setInputs(prev => ({ ...prev, account: Number(e.target.value) }))}
             />
-            <label htmlFor="schoolName">School/University (required for educators)</label>
+            <label htmlFor="account-educator">Educator</label>
+
+            <input
+              type="radio"
+              id="account-playwright"
+              name="account"
+              value={1}
+              checked={inputs.account === 1}
+              onChange={(e) => setInputs(prev => ({ ...prev, account: Number(e.target.value) }))}
+            />
+            <label htmlFor="account-playwright">Playwright</label>
           </div>
 
-          {/* Always show contact + over18 */}
-          <div className="checkbox-group">
-            <label className="checkbox-item">
+          {inputs.account === 0 && (
+            <div className="input-group">
               <input
-                type="checkbox"
-                id="contact"
-                checked={inputs.contact === 1}
+                id="schoolName"
+                type="text"
+                placeholder=" "
+                value={inputs.schoolName}
                 onChange={handleChange}
+                required
               />
-              Personal Contact Form
-            </label>
-            <p className="info-text">
-              Allow users to contact you without revealing your e-mail.
-            </p>
+              <label htmlFor="schoolName">School/University<span className="required-star">*</span></label>
+            </div>
+          )}
 
-            <label className="checkbox-item">
-              <input
-                type="checkbox"
-                id="over18"
-                checked={inputs.over18 === 1}
-                onChange={handleChange}
-              />
-              Are you 18 or older?
-            </label>
-          </div>
+          {inputs.account === 1 && (
+            <div className="checkbox-group">
+
+              {/* PLAYWRIGHT CHECKBOX */}
+              <label className="checkbox-item playwright-checkbox">
+                <input
+                  type="checkbox"
+                  id="contact"
+                  checked={inputs.contact === 1}
+                  onChange={handleChange}
+                />
+                Are you a playwright?
+
+                {/* Info icon */}
+                <span className="info-icon" title="Selecting this is the path to allowing you to post your works on our website. After selecting it, your account will be verified within ~24 hours. Once verified, you may publish your works. Users may contact you using our personal contact form (your actual email stays hidden unless you choose otherwise). You may disable contact entirely in your account settings at any time.">
+                  ⓘ
+                </span>
+              </label>
+
+              <p className="info-text">
+                When selected, we will verify your account within 24 hours.  
+                After verification, you can post your works on our site.  
+                Users will be able to contact you through our personal contact form,  
+                which hides your email unless you choose otherwise.  
+                You can disable all contact anytime in your account settings.
+              </p>
+
+              {/* 18+ CHECKBOX (Required) */}
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  id="over18"
+                  checked={inputs.over18 === 1}
+                  onChange={handleChange}
+                />
+                Are you 18 or older? <span className="required-star">*</span>
+              </label>
+
+            </div>
+          )}
 
           {error && <div className="error-msg">{error}</div>}
 
