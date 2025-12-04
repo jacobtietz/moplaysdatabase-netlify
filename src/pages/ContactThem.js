@@ -1,32 +1,46 @@
-// src/pages/ContactThem.js
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../css/Contact.css";
+import axios from "axios";
 
 const ContactThem = () => {
   const { id } = useParams(); // ID of the user you're contacting
 
   const [targetUser, setTargetUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // logged-in user
   const [message, setMessage] = useState("");
   const [submissionStatus, setSubmissionStatus] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  // Fetch target user
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/users/${id}`);
-        const data = await res.json();
-        setTargetUser(data.user || null);
+        const res = await axios.get(`${API_URL}/api/users/${id}`, { withCredentials: true });
+        setTargetUser(res.data.user || null);
       } catch (err) {
-        console.error("Failed to load user:", err);
+        console.error("Failed to load target user:", err);
         setTargetUser(null);
       }
     };
-
     fetchUser();
-  }, [id, BACKEND_URL]);
+  }, [id, API_URL]);
+
+  // Fetch logged-in user
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
+        setCurrentUser(res.data.user || null);
+      } catch (err) {
+        console.error("Failed to load current user:", err);
+        setCurrentUser(null);
+      }
+    };
+    fetchCurrentUser();
+  }, [API_URL]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,29 +53,30 @@ const ContactThem = () => {
       return;
     }
 
+    if (!currentUser) {
+      setErrorMsg("You must be logged in to send a message.");
+      setSubmissionStatus("error");
+      return;
+    }
+
     try {
-      const response = await fetch(`${BACKEND_URL}/api/contact/user/${id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
-
-      const text = await response.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = { message: text };
-      }
-
-      if (!response.ok) throw new Error(data.message || "Failed to send message");
+      const response = await axios.post(
+        `${API_URL}/api/contact/user/${id}`,
+        {
+          message,
+          fromName: `${currentUser.firstName} ${currentUser.lastName}`,
+          fromEmail: currentUser.email,
+          fromPhone: currentUser.phone,
+        },
+        { withCredentials: true }
+      );
 
       setSubmissionStatus("success");
       setMessage("");
     } catch (err) {
       console.error(err);
       setSubmissionStatus("error");
-      setErrorMsg(err.message || "Server error. Please try again later.");
+      setErrorMsg(err.response?.data?.message || "Server error. Please try again later.");
     }
   };
 
@@ -70,6 +85,7 @@ const ContactThem = () => {
   }, []);
 
   if (!targetUser) return <p>Loading user...</p>;
+  if (!currentUser) return <p>Loading your info...</p>;
 
   return (
     <div className="contact-page-container">
@@ -77,7 +93,7 @@ const ContactThem = () => {
         <header className="contact-header">
           <h1>Contact {targetUser.firstName} {targetUser.lastName}</h1>
           <p className="subtitle">
-            Send an anonymous message directly to this user.
+            Your name, email, and phone number will be sent automatically.
           </p>
         </header>
 
@@ -103,7 +119,7 @@ const ContactThem = () => {
 
           {submissionStatus === "success" && (
             <div className="status-message success">
-              Message delivered anonymously!
+              Message delivered!
             </div>
           )}
           {submissionStatus === "error" && (
