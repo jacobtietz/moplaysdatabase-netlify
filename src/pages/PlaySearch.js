@@ -242,7 +242,16 @@ export default function PlaySearch() {
               </div>
               <div className="filter-group">
                 <label>Duration (Minutes):</label>
-                <input type="number" name="minDuration" placeholder="Min" value={advancedFilters.minDuration} onChange={handleAdvancedChange} />
+<input
+  type="number"
+  name="minDuration"
+  value={advancedFilters.minDuration}
+  onChange={handleAdvancedChange}
+  placeholder="Min" // this text shows when empty
+  style={{
+    color: advancedFilters.minDuration ? "#000" : "#888", // dark text when typing, gray when empty
+  }}
+/>
                 <input type="number" name="maxDuration" placeholder="Max" value={advancedFilters.maxDuration} onChange={handleAdvancedChange} />
               </div>
               <div className="filter-group">

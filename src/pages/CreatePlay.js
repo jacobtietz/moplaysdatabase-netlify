@@ -276,7 +276,7 @@ export default function CreatePlay() {
             <option value="Middle School">Middle School</option>
             <option value="High School">High School</option>
             <option value="University">University</option>
-            <option value="Youth">Community</option>
+            <option value="Community">Community</option>
             <option value="Professional">Professional</option>
           </select>
 
