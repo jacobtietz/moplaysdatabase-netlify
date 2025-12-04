@@ -133,18 +133,23 @@ export default function Profile() {
 
         <hr className="divider" />
 
-        <div className="profile-links">
-          <a
-            className="profile-link"
-            href={`/plays?search=${encodeURIComponent(`${user.firstName} ${user.lastName}`)}`}
-          >
-            view plays »
-          </a>
-          <span className="link-divider">|</span>
-          <a href="/plays/create" className="profile-link">submit your play »</a>
-          <span className="link-divider">|</span>
-          <a href="/contact" className="profile-link">contact »</a>
-        </div>
+<div className="profile-links">
+  <a
+    className="profile-link"
+    href={`/plays?search=${encodeURIComponent(`${user.firstName} ${user.lastName}`)}`}
+  >
+    view plays »
+  </a>
+  <span className="link-divider">|</span>
+  {currentUser?.account !== 0 && (
+    <>
+      <a href="/plays/create" className="profile-link">submit your play »</a>
+      <span className="link-divider">|</span>
+    </>
+  )}
+  <a href="/contact" className="profile-link">contact »</a>
+</div>
+
 
         <hr className="divider" />
       </section>
