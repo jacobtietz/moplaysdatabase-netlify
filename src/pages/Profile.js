@@ -34,7 +34,10 @@ export default function Profile() {
     const fetchUsers = async () => {
       try {
         // Fetch logged-in user for header
-        const currentUserRes = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
+        const currentUserRes = await axios.get(
+          `${API_URL}/api/users/profile`,
+          { withCredentials: true }
+        );
         setCurrentUser(currentUserRes.data.user);
 
         // Fetch profile being viewed
@@ -73,7 +76,11 @@ export default function Profile() {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${API_URL}/api/auth/logout`, {}, { withCredentials: true });
+      await axios.post(
+        `${API_URL}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
       setCurrentUser(null);
       navigate("/login", { replace: true });
     } catch (err) {
@@ -87,13 +94,15 @@ export default function Profile() {
   const profile = user.profile || {};
 
   const firstLetter = currentUser?.firstName?.charAt(0) || "";
-  const restName = currentUser ? `${currentUser.firstName.slice(1)} ${currentUser.lastName}` : "";
+  const restName = currentUser
+    ? `${currentUser.firstName.slice(1)} ${currentUser.lastName}`
+    : "";
 
   return (
     <div className="profile-wrapper">
-      {/* --- Header with User Menu (shows logged-in user) --- */}
+      {/* --- Header with User Menu (ONLY IF account >= 2) --- */}
       <header className="profile-header-top">
-        {currentUser && (
+        {currentUser?.account >= 2 && (
           <div className="user-section2" ref={menuRef}>
             <div
               className="user-icon-circle"
@@ -101,21 +110,27 @@ export default function Profile() {
             >
               {firstLetter}
             </div>
-            <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
 
-{userMenuOpen && currentUser?.account >= 2 && (
-  <div className="user-dropdown">
-    <button onClick={() => navigate(`/profile/${currentUser._id}`)}>Profile</button>
-    <button onClick={() => navigate("/settings")}>Settings</button>
-    <button onClick={handleLogout}>Logout</button>
-  </div>
-)}
+            <span onClick={() => setUserMenuOpen(!userMenuOpen)}>
+              {restName}
+            </span>
 
+            {userMenuOpen && (
+              <div className="user-dropdown">
+                <button
+                  onClick={() => navigate(`/profile/${currentUser._id}`)}
+                >
+                  Profile
+                </button>
+                <button onClick={() => navigate("/settings")}>Settings</button>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
           </div>
         )}
       </header>
 
-      {/* --- Main Profile Content (shows profile being viewed) --- */}
+      {/* --- Main Profile Content --- */}
       <section className="profile-header">
         <div className="profile-top">
           <img
@@ -127,30 +142,43 @@ export default function Profile() {
             className="profile-photo"
           />
           <div className="profile-text">
-            <h1>{user.firstName} {user.lastName}</h1>
-            <p>{profile.description || "This playwright has not added a description yet."}</p>
+            <h1>
+              {user.firstName} {user.lastName}
+            </h1>
+            <p>
+              {profile.description ||
+                "This playwright has not added a description yet."}
+            </p>
           </div>
         </div>
 
         <hr className="divider" />
 
-<div className="profile-links">
-  <a
-    className="profile-link"
-    href={`/plays?search=${encodeURIComponent(`${user.firstName} ${user.lastName}`)}`}
-  >
-    view plays »
-  </a>
-  <span className="link-divider">|</span>
-  {currentUser?.account > 1 && (
-    <>
-      <a href="/plays/create" className="profile-link">submit your play »</a>
-      <span className="link-divider">|</span>
-    </>
-  )}
-  <a href="/contact" className="profile-link">contact »</a>
-</div>
+        <div className="profile-links">
+          <a
+            className="profile-link"
+            href={`/plays?search=${encodeURIComponent(
+              `${user.firstName} ${user.lastName}`
+            )}`}
+          >
+            view plays »
+          </a>
 
+          <span className="link-divider">|</span>
+
+          {currentUser?.account > 1 && (
+            <>
+              <a href="/plays/create" className="profile-link">
+                submit your play »
+              </a>
+              <span className="link-divider">|</span>
+            </>
+          )}
+
+          <a href="/contact" className="profile-link">
+            contact »
+          </a>
+        </div>
 
         <hr className="divider" />
       </section>
@@ -159,26 +187,39 @@ export default function Profile() {
         <div className="general-info">
           <h3>General Information</h3>
           <p>{profile.companyName || "No company listed."}</p>
-          <p>{profile.street && profile.stateCity ? `${profile.street}, ${profile.stateCity}` : "No address provided."}</p>
+          <p>
+            {profile.street && profile.stateCity
+              ? `${profile.street}, ${profile.stateCity}`
+              : "No address provided."}
+          </p>
           <p>{profile.country || "No country specified."}</p>
           <p>{user.email}</p>
           <p>{formatPhoneNumber(user.phone)}</p>
           {profile.website ? (
             <p>
               <a
-                href={profile.website.startsWith("http") ? profile.website : `https://${profile.website}`}
+                href={
+                  profile.website.startsWith("http")
+                    ? profile.website
+                    : `https://${profile.website}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 {profile.website}
               </a>
             </p>
-          ) : <p>No website provided.</p>}
+          ) : (
+            <p>No website provided.</p>
+          )}
         </div>
 
         <div className="biography">
           <h3>Biography</h3>
-          <p>{profile.biography || "This playwright hasn't written a biography yet."}</p>
+          <p>
+            {profile.biography ||
+              "This playwright hasn't written a biography yet."}
+          </p>
         </div>
       </section>
     </div>
