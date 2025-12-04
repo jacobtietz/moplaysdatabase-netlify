@@ -1,134 +1,139 @@
-/* Contact page container */
+/* src/css/Contact.css */
+
+/* ----------------- Page Container ----------------- */
 .contact-page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 3rem 1rem;
-  min-height: 80vh;
-  background: #f7f8fa;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 3rem 1rem;
+    background: #f4f6f8;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Card styling */
+/* ----------------- Contact Card ----------------- */
 .contact-card {
-  background: #ffffff;
-  padding: 2.5rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  max-width: 700px;
-  width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 600px;
 }
 
-/* Header */
+/* ----------------- Header ----------------- */
 .contact-header {
-  text-align: center;
-  margin-bottom: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 .contact-header h1 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 0.3rem;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #111827;
 }
 
 .contact-header .subtitle {
-  font-size: 0.95rem;
-  color: #666;
+    font-size: 0.95rem;
+    color: #6b7280;
 }
 
-/* Form grid */
+/* ----------------- Form Grid ----------------- */
 .form-grid {
-  display: grid;
-  grid-gap: 1rem 1.5rem;
+    display: grid;
+    gap: 1rem;
 }
 
 .form-grid.two-cols {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-/* Form groups */
+/* ----------------- Form Group ----------------- */
 .form-group {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #555;
+.form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
 }
 
 .form-input,
 .form-textarea {
-  padding: 0.65rem 0.9rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  outline: none;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-input:focus,
 .form-textarea:focus {
-  border-color: #3f51b5;
-  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    outline: none;
 }
 
-/* Textarea */
 .form-textarea {
-  min-height: 120px;
-  resize: vertical;
+    min-height: 120px;
+    resize: vertical;
 }
 
-/* Submit button */
+/* ----------------- Submit Button ----------------- */
 .submit-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #3f51b5;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  margin-top: 0.5rem;
+    background-color: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%;
+    margin-top: 1rem;
 }
 
 .submit-button:disabled {
-  background-color: #a0a5c1;
-  cursor: not-allowed;
+    background-color: #9ca3af;
+    cursor: not-allowed;
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #334296;
+    background-color: #1e40af;
+    transform: translateY(-1px);
 }
 
-/* Status messages */
+/* ----------------- Status Messages ----------------- */
 .status-message {
-  margin-top: 1rem;
-  padding: 0.9rem 1rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  text-align: center;
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-align: center;
 }
 
 .status-message.success {
-  background-color: #e6f4ea;
-  color: #2e7d32;
-  border: 1px solid #2e7d32;
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #10b981;
 }
 
 .status-message.error {
-  background-color: #fdecea;
-  color: #c62828;
-  border: 1px solid #c62828;
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #ef4444;
 }
 
-/* Responsive adjustments */
-@media (max-width: 500px) {
-  .form-grid.two-cols {
-    grid-template-columns: 1fr;
-  }
+/* ----------------- Responsive Adjustments ----------------- */
+@media (max-width: 480px) {
+    .contact-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-grid.two-cols {
+        grid-template-columns: 1fr;
+    }
 }
