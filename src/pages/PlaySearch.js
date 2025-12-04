@@ -97,21 +97,17 @@ export default function PlaySearch() {
   useEffect(() => {
     document.title = "MPDB";
 
-    // check auth once on mount
     checkAuth();
 
-    // Get search query from URL
     const params = new URLSearchParams(location.search);
     const searchQuery = params.get("search") || "";
     setSearch(searchQuery);
 
-    // Fetch plays every time the component mounts or URL changes
     fetchPlays(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]); // dependency on location.search ensures refresh on redirect or manual refresh
+  }, [location.search]);
 
   // ------------------- Global Enter Key Listener -------------------
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleGlobalEnter = (e) => {
       if (e.key === "Enter" && !enterCooldown) {
@@ -122,7 +118,6 @@ export default function PlaySearch() {
     };
     document.addEventListener("keydown", handleGlobalEnter);
     return () => document.removeEventListener("keydown", handleGlobalEnter);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enterCooldown]);
 
   // ------------------- Click Outside Menu -------------------
@@ -264,6 +259,7 @@ export default function PlaySearch() {
           )}
         </div>
       </div>
+
       {/* --- Pagination Top --- */}
       {totalPages > 1 && (
         <div className="pagination bottom-pagination">
@@ -316,9 +312,12 @@ export default function PlaySearch() {
                       play.author || "Anonymous"
                     )}
                   </p>
+
+                  {/* --- UPDATED LINE --- */}
                   <p className="play-details">
-                    {play.genre || "-"} | {play.duration || 0} Minutes | {play.males || 0} M, {play.females || 0} W | {play.total || 0} Total Actors
+                    {play.genre || "-"} | {play.duration || 0} Minutes | {play.males || 0} M, {play.females || 0} W | {play.total || 0} Total Actors | {play.organizationType || "-"}
                   </p>
+
                   <p className="play-meta">
                     {play.funding || "-"} | {play.acts || "-"} Acts | Publication Date: {play.publicationDate ? new Date(play.publicationDate).toLocaleDateString() : "-"} | Submission Date: {play.submissionDate ? new Date(play.submissionDate).toLocaleDateString() : "-"}
                   </p>

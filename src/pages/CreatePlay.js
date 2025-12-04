@@ -18,6 +18,7 @@ export default function CreatePlay() {
     coverImage: null,
     abstract: "",
     genre: "Comedy",
+    organizationType: "University", // <<< ADDED
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -97,7 +98,6 @@ export default function CreatePlay() {
         const resized = await resizeImage(files[0], 200, 250);
         setFormData({ ...formData, [name]: resized });
 
-        // create preview from resized version
         const previewUrl = URL.createObjectURL(resized);
         setImagePreview(previewUrl);
       } catch (error) {
@@ -172,6 +172,7 @@ export default function CreatePlay() {
         coverImage: null,
         abstract: "",
         genre: "Comedy",
+        organizationType: "University", // <<< ADDED
       });
       setImagePreview(null);
     } catch (err) {
@@ -262,6 +263,21 @@ export default function CreatePlay() {
           >
             <option value="Donated">Donated</option>
             <option value="Paid">Paid</option>
+          </select>
+
+          <label>Organization Type</label> {/* <<< ADDED */}
+          <select
+            name="organizationType"
+            value={formData.organizationType}
+            onChange={handleChange}
+            required
+          >
+            <option value="School">School</option>
+            <option value="Community">Community</option>
+            <option value="Professional">Professional</option>
+            <option value="University">University</option>
+            <option value="Youth">Youth</option>
+            <option value="Other">Other</option>
           </select>
 
           <label>Genre</label>

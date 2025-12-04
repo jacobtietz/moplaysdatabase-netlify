@@ -19,6 +19,7 @@ export default function EditPlay() {
     coverImage: null,
     abstract: "",
     genre: "Comedy",
+    organizationType: "University", // <<< ADDED
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -73,6 +74,7 @@ export default function EditPlay() {
           coverImage: null,
           abstract: play.abstract || "",
           genre: play.genre || "Comedy",
+          organizationType: play.organizationType || "University", // <<< ADDED
         });
         setImagePreview(play.coverImage || null);
       } catch (err) {
@@ -173,6 +175,7 @@ export default function EditPlay() {
       data.append("funding", formData.funding);
       data.append("genre", formData.genre);
       data.append("abstract", formData.abstract);
+      data.append("organizationType", formData.organizationType); // <<< ADDED
       if (formData.coverImage) data.append("coverImage", formData.coverImage);
 
       await axios.put(`${API_URL}/api/plays/${id}`, data, {
@@ -264,6 +267,21 @@ export default function EditPlay() {
           <select name="funding" value={formData.funding} onChange={handleChange}>
             <option value="Donated">Donated</option>
             <option value="Paid">Paid</option>
+          </select>
+
+          <label>Organization Type</label> {/* <<< ADDED */}
+          <select
+            name="organizationType"
+            value={formData.organizationType}
+            onChange={handleChange}
+            required
+          >
+            <option value="School">School</option>
+            <option value="Community">Community</option>
+            <option value="Professional">Professional</option>
+            <option value="University">University</option>
+            <option value="Youth">Youth</option>
+            <option value="Other">Other</option>
           </select>
 
           <label>Genre</label>
