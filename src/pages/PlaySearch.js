@@ -214,6 +214,9 @@ export default function PlaySearch() {
           <option value="Drama">Drama</option>
           <option value="Comedy">Comedy</option>
           <option value="Musical">Musical</option>
+          <option value="Theatre of the Mind">Theatre of the Mind</option>
+          <option value="Tragedy">Tragedy</option>
+          <option value="Mystery">Mystery</option>
         </select>
         <select value={fundingType} onChange={(e) => setFundingType(e.target.value)}>
           <option value="">Funding Type</option>

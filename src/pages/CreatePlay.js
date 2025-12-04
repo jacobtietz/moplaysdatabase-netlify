@@ -274,6 +274,9 @@ export default function CreatePlay() {
             <option value="Comedy">Comedy</option>
             <option value="Musical">Musical</option>
             <option value="Drama">Drama</option>
+            <option value="Theatre of the Mind">Theatre of the Mind</option>
+            <option value="Tragedy">Tragedy</option>
+            <option value="Mystery">Mystery</option>
           </select>
 
           <label>Image File</label>
