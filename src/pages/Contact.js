@@ -30,6 +30,7 @@ const ContactUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionStatus(null);
+    setErrorMsg('');
 
     if (!isFormValid()) {
       setErrorMsg('Please fill all required fields correctly.');
@@ -41,16 +42,16 @@ const ContactUs = () => {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          mobileNo: formData.mobileNo.trim(),
-          emailAddress: formData.emailAddress.trim(),
-          message: formData.message.trim(),
-        }),
+        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const text = await response.text(); // first get raw text
+      let data;
+      try {
+        data = JSON.parse(text); // try parsing JSON
+      } catch {
+        data = { message: text }; // fallback to text
+      }
 
       if (!response.ok) throw new Error(data.message || 'Failed to send message.');
 
