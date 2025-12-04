@@ -1,7 +1,7 @@
 // src/pages/AdminUserManagement.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../css/AdminUserManagement.css"; // create your own styles
+import "../css/AdminUsers.css"; // create your own styles
 
 const AdminUserManagement = () => {
   const [users, setUsers] = useState([]);
