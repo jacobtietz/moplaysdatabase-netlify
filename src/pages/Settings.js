@@ -90,7 +90,7 @@ export default function Settings() {
       const formData = new FormData();
       formData.append("firstName", firstName.substring(0, 20));
       formData.append("lastName", lastName.substring(0, 20));
-      formData.append("phone", phone);
+      formData.append("phone", phone || "");
       formData.append("description", description.substring(0, 450));
       formData.append("biography", biography.substring(0, 2000));
       formData.append("companyName", companyName);
@@ -98,7 +98,7 @@ export default function Settings() {
       formData.append("stateCity", stateCity);
       formData.append("country", country);
       formData.append("website", website);
-      formData.append("contact", contact);
+      formData.append("contact", contact ? 1 : 0);
       if (profilePic) formData.append("profilePicture", profilePic);
 
       const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
@@ -107,9 +107,15 @@ export default function Settings() {
       alert("Profile updated!");
       setUser(res.data.user);
     } catch (err) {
-      console.error("Error updating profile:", err);
-      alert("Failed to save changes.");
-    }
+  if (err.response) {
+    console.error("Backend error:", err.response.data);
+    alert("Failed to save changes: " + err.response.data.message);
+  } else {
+    console.error("Network or client error:", err);
+    alert("Failed to save changes.");
+  }
+}
+
   };
 
   if (loading) return <p>Loading...</p>;
