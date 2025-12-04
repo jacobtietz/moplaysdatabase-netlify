@@ -59,7 +59,6 @@ export default function Settings() {
         setWebsite(u.profile?.website || "");
         setContact(u.contact || false);
 
-        // Load visibility settings if stored in user.profile.visibility
         setVisibility(u.profile?.visibility || {
           phone: false,
           description: false,
@@ -188,7 +187,7 @@ export default function Settings() {
             <label>Last Name</label>
             <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} maxLength={20} />
 
-            {/* Other fields with visibility checkboxes */}
+            {/* Other fields with proper visibility labels */}
             {[
               { label: "Phone", value: phone, setter: setPhone, key: "phone", type: "tel", placeholder: "+1 (555) 555-5555" },
               { label: "Contact Form Enable/Disable", value: contact, setter: setContact, key: "contact", type: "checkbox" },
@@ -207,7 +206,7 @@ export default function Settings() {
                     checked={visibility[field.key] || false}
                     onChange={() => toggleVisibility(field.key)}
                   />
-                  Show on Profile
+                  Show {field.label} on Profile
                 </label>
 
                 {field.type === "textarea" ? (
