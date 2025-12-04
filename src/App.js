@@ -10,12 +10,13 @@ import Cookies from "./pages/Cookies";
 import Privacy from "./pages/Privacy";
 import DMCA from "./pages/DMCA";
 import Contact from "./pages/Contact";
-import ContactThem from "./pages/ContactThem"; // <-- new page
+import ContactThem from "./pages/ContactThem";
 import PlaySearch from "./pages/PlaySearch";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import CreatePlay from "./pages/CreatePlay";
 import EditPlay from "./pages/EditPlay";
+import AdminUsers from "./pages/AdminUsers"; // <-- new page
 
 import TopBar from "./components/TopBar";
 import BottomBar from "./components/BottomBar";
@@ -45,6 +46,16 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <ContactThem />
+                </PrivateRoute>
+              }
+            />
+
+            {/* Admin route */}
+            <Route
+              path="/admin/users"
+              element={
+                <PrivateRoute adminOnly={true}>
+                  <AdminUsers />
                 </PrivateRoute>
               }
             />
