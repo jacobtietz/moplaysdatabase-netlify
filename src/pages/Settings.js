@@ -39,14 +39,13 @@ export default function Settings() {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  // ------------------- Fetch User -------------------
   useEffect(() => {
     document.title = "Settings – MPDB";
-
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
         if (!res.data.user) throw new Error("Not authenticated");
-
         const u = res.data.user;
         setUser(u);
         setFirstName(u.firstName || "");
@@ -61,17 +60,30 @@ export default function Settings() {
         setCountry(u.profile?.country || "");
         setWebsite(u.profile?.website || "");
         setContact(u.contact || false);
-        setVisibility(u.profile?.visibility || visibility);
+
+        // Functional update to avoid ESLint warning
+        setVisibility(() => u.profile?.visibility || {
+          phone: false,
+          description: false,
+          biography: false,
+          companyName: false,
+          street: false,
+          stateCity: false,
+          country: false,
+          website: false,
+          contact: false,
+          profilePic: false,
+        });
       } catch (err) {
         navigate("/login", { replace: true });
       } finally {
         setLoading(false);
       }
     };
-
     fetchUser();
   }, [navigate, API_URL]);
 
+  // ------------------- Click Outside Menu -------------------
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -102,10 +114,6 @@ export default function Settings() {
     }
   };
 
-  const toggleVisibility = (field) => {
-    setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
-
   const handleSave = async () => {
     try {
       const formData = new FormData();
@@ -123,7 +131,9 @@ export default function Settings() {
       formData.append("visibility", JSON.stringify(visibility));
       if (profilePic) formData.append("profilePicture", profilePic);
 
-      const res = await axios.put(`${API_URL}/api/users/profile`, formData, { withCredentials: true });
+      const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
+        withCredentials: true,
+      });
       alert("Profile updated!");
       setUser(res.data.user);
     } catch (err) {
@@ -138,16 +148,17 @@ export default function Settings() {
   const firstLetter = firstName.charAt(0);
   const restName = `${firstName.slice(1)} ${lastName}`;
 
-  const fields = [
-    { label: "Phone", value: phone, setter: setPhone, key: "phone", type: "tel", placeholder: "+1 (555) 555-5555" },
-    { label: "Contact Form", value: contact, setter: setContact, key: "contact", type: "checkbox" },
-    { label: "Description", value: description, setter: setDescription, key: "description", type: "textarea" },
-    { label: "Biography", value: biography, setter: setBiography, key: "biography", type: "textarea" },
-    { label: "Company Name", value: companyName, setter: setCompanyName, key: "companyName", type: "text" },
-    { label: "Street", value: street, setter: setStreet, key: "street", type: "text" },
-    { label: "State & City", value: stateCity, setter: setStateCity, key: "stateCity", type: "text" },
-    { label: "Country", value: country, setter: setCountry, key: "country", type: "text" },
-    { label: "Website", value: website, setter: setWebsite, key: "website", type: "text", placeholder: "https://example.com" },
+  const profileFields = [
+    { label: "Phone", value: phone, setValue: setPhone, key: "phone", type: "text", placeholder: "+1 (555) 555-5555" },
+    { label: "Description", value: description, setValue: setDescription, key: "description", type: "textarea" },
+    { label: "Biography", value: biography, setValue: setBiography, key: "biography", type: "textarea" },
+    { label: "Company Name", value: companyName, setValue: setCompanyName, key: "companyName", type: "text" },
+    { label: "Street", value: street, setValue: setStreet, key: "street", type: "text" },
+    { label: "State & City", value: stateCity, setValue: setStateCity, key: "stateCity", type: "text" },
+    { label: "Country", value: country, setValue: setCountry, key: "country", type: "text" },
+    { label: "Website", value: website, setValue: setWebsite, key: "website", type: "text", placeholder: "https://example.com" },
+    { label: "Contact Form Enable/Disable", value: contact, setValue: setContact, key: "contact", type: "checkbox" },
+    { label: "Profile Picture", value: profilePic, setValue: setProfilePic, key: "profilePic", type: "file" },
   ];
 
   return (
@@ -174,44 +185,46 @@ export default function Settings() {
         <div className="profile-editor">
           <h2>Profile</h2>
 
-          <div className="profile-pic-preview">
-            <img
-              src={profilePic instanceof File ? URL.createObjectURL(profilePic) : profilePic || "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"}
-              alt="Profile"
-            />
-            <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
-            <div className="visibility-container">
-              <label>Profile Picture</label>
-              <input type="checkbox" checked={visibility.profilePic} onChange={() => toggleVisibility("profilePic")} />
-            </div>
-          </div>
-
-          <div className="profile-fields">
-            <label>First Name</label>
-            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} maxLength={20} />
-
-            <label>Last Name</label>
-            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} maxLength={20} />
-
-            {fields.map((field) => (
-              <div className="field-line" key={field.key}>
-                <label className="field-label">{field.label}</label>
-                {field.type === "textarea" ? (
-                  <textarea value={field.value} onChange={(e) => field.setter(e.target.value)} maxLength={field.key === "description" ? 450 : 2000} />
-                ) : field.type === "checkbox" ? (
-                  <input type="checkbox" checked={field.value} onChange={(e) => field.setter(e.target.checked)} />
-                ) : (
-                  <input type={field.type} value={field.value} onChange={(e) => field.setter(e.target.value)} placeholder={field.placeholder || ""} />
-                )}
-                <div className="visibility-container">
-                  <label>Visible on Profile</label>
-                  <input type="checkbox" checked={visibility[field.key] || false} onChange={() => toggleVisibility(field.key)} />
+          {profileFields.map((field) => (
+            <div key={field.key} className="profile-field-row">
+              <label>{field.label}</label>
+              {field.type === "textarea" ? (
+                <textarea
+                  value={field.value}
+                  onChange={(e) => field.setValue(e.target.value)}
+                />
+              ) : field.type === "checkbox" ? (
+                <input
+                  type="checkbox"
+                  checked={field.value}
+                  onChange={(e) => field.setValue(e.target.checked)}
+                />
+              ) : field.type === "file" ? (
+                <input type="file" accept="image/png, image/jpeg" onChange={handleProfilePicChange} />
+              ) : (
+                <input
+                  type="text"
+                  value={field.value}
+                  placeholder={field.placeholder || ""}
+                  onChange={(e) => field.setValue(e.target.value)}
+                />
+              )}
+              {field.key !== "firstName" && field.key !== "lastName" && field.key !== "profilePic" && (
+                <div className="visibility-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={visibility[field.key]}
+                    onChange={(e) =>
+                      setVisibility((v) => ({ ...v, [field.key]: e.target.checked }))
+                    }
+                  />
+                  <span>Visible on profile</span>
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
+          ))}
 
-            <button className="save-btn" onClick={handleSave}>Save Changes</button>
-          </div>
+          <button className="save-btn" onClick={handleSave}>Save Changes</button>
         </div>
       </main>
     </div>
