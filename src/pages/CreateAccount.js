@@ -96,7 +96,6 @@ export default function CreateAccount() {
 
       const data = await res.json();
       if (res.ok) {
-        // Set popup flag
         localStorage.setItem("accountCreated", "true");
         navigate("/login");
       } else {
@@ -176,69 +175,45 @@ export default function CreateAccount() {
             <label htmlFor="password">Password<span className="required-star">*</span></label>
           </div>
 
-          <div className="radio-group">
-            <input
-              type="radio"
-              id="account-educator"
-              name="account"
-              value={0}
-              checked={inputs.account === 0}
-              onChange={(e) => setInputs(prev => ({ ...prev, account: Number(e.target.value) }))}
-            />
-            <label htmlFor="account-educator">Educator</label>
+          {/* REMOVED RADIO BUTTONS — keeping account logic unchanged */}
 
+          {/* Always show schoolName */}
+          <div className="input-group">
             <input
-              type="radio"
-              id="account-playwright"
-              name="account"
-              value={1}
-              checked={inputs.account === 1}
-              onChange={(e) => setInputs(prev => ({ ...prev, account: Number(e.target.value) }))}
+              id="schoolName"
+              type="text"
+              placeholder=" "
+              value={inputs.schoolName}
+              onChange={handleChange}
             />
-            <label htmlFor="account-playwright">Playwright</label>
+            <label htmlFor="schoolName">School/University (required for educators)</label>
           </div>
 
-          {inputs.account === 0 && (
-            <div className="input-group">
+          {/* Always show contact + over18 */}
+          <div className="checkbox-group">
+            <label className="checkbox-item">
               <input
-                id="schoolName"
-                type="text"
-                placeholder=" "
-                value={inputs.schoolName}
+                type="checkbox"
+                id="contact"
+                checked={inputs.contact === 1}
                 onChange={handleChange}
-                required
               />
-              <label htmlFor="schoolName">School/University<span className="required-star">*</span></label>
-            </div>
-          )}
+              Personal Contact Form
+            </label>
+            <p className="info-text">
+              Allow users to contact you without revealing your e-mail.
+            </p>
 
-          {inputs.account === 1 && (
-            <div className="checkbox-group">
-              <label className="checkbox-item">
-                <input
-                  type="checkbox"
-                  id="contact"
-                  checked={inputs.contact === 1}
-                  onChange={handleChange}
-                />
-                Personal Contact Form
-              </label>
-              <p className="info-text">
-                Allow other users to contact you via a personal contact form that keeps your e-mail
-                address hidden. This option can be enabled or disabled anytime through the settings.
-              </p>
-
-              <label className="checkbox-item">
-                <input
-                  type="checkbox"
-                  id="over18"
-                  checked={inputs.over18 === 1}
-                  onChange={handleChange}
-                />
-                Are you 18 or older?<span className="required-star">*</span>
-              </label>
-            </div>
-          )}
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                id="over18"
+                checked={inputs.over18 === 1}
+                onChange={handleChange}
+              />
+              Are you 18 or older?
+            </label>
+          </div>
 
           {error && <div className="error-msg">{error}</div>}
 
