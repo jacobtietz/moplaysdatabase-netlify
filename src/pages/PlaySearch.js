@@ -237,7 +237,7 @@ export default function PlaySearch() {
   </div>
 )}
 
-              )}
+              
             </div>
           )}
         </div>
