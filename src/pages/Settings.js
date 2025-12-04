@@ -22,6 +22,18 @@ export default function Settings() {
   const [website, setWebsite] = useState("");
   const [contact, setContact] = useState(false);
 
+  const [visibility, setVisibility] = useState({
+    phone: false,
+    description: false,
+    biography: false,
+    companyName: false,
+    street: false,
+    stateCity: false,
+    country: false,
+    website: false,
+    contact: false,
+  });
+
   const menuRef = useRef(null);
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
@@ -46,6 +58,19 @@ export default function Settings() {
         setCountry(u.profile?.country || "");
         setWebsite(u.profile?.website || "");
         setContact(u.contact || false);
+
+        // Load visibility settings if stored in user.profile.visibility
+        setVisibility(u.profile?.visibility || {
+          phone: false,
+          description: false,
+          biography: false,
+          companyName: false,
+          street: false,
+          stateCity: false,
+          country: false,
+          website: false,
+          contact: false,
+        });
       } catch (err) {
         navigate("/login", { replace: true });
       } finally {
@@ -99,6 +124,7 @@ export default function Settings() {
       formData.append("country", country);
       formData.append("website", website);
       formData.append("contact", contact);
+      formData.append("visibility", JSON.stringify(visibility));
       if (profilePic) formData.append("profilePicture", profilePic);
 
       const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
@@ -115,19 +141,19 @@ export default function Settings() {
   if (loading) return <p>Loading...</p>;
   if (!user) return <p>User not found.</p>;
 
-  // Split first letter and rest of the name for header
   const firstLetter = firstName.charAt(0);
   const restName = `${firstName.slice(1)} ${lastName}`;
+
+  const toggleVisibility = (field) => {
+    setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
 
   return (
     <div className="settings-wrapper">
       <header className="settings-header">
         <h1>Settings</h1>
         <div className="user-section" ref={menuRef}>
-          <div
-            className="user-icon-circle"
-            onClick={() => setUserMenuOpen(!userMenuOpen)}
-          >
+          <div className="user-icon-circle" onClick={() => setUserMenuOpen(!userMenuOpen)}>
             {firstLetter}
           </div>
           <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
@@ -155,42 +181,44 @@ export default function Settings() {
           </div>
 
           <div className="profile-fields">
+            {/* Always visible: first/last name */}
             <label>First Name</label>
             <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} maxLength={20} />
 
             <label>Last Name</label>
             <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} maxLength={20} />
 
-            <label>Phone</label>
-            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+1 (555) 555-5555" />
+            {/* Other fields with visibility checkboxes */}
+            {[
+              { label: "Phone", value: phone, setter: setPhone, key: "phone", type: "tel", placeholder: "+1 (555) 555-5555" },
+              { label: "Contact Form Enable/Disable", value: contact, setter: setContact, key: "contact", type: "checkbox" },
+              { label: "Description", value: description, setter: setDescription, key: "description", type: "textarea" },
+              { label: "Biography", value: biography, setter: setBiography, key: "biography", type: "textarea" },
+              { label: "Company Name", value: companyName, setter: setCompanyName, key: "companyName", type: "text" },
+              { label: "Street", value: street, setter: setStreet, key: "street", type: "text" },
+              { label: "State & City", value: stateCity, setter: setStateCity, key: "stateCity", type: "text" },
+              { label: "Country", value: country, setter: setCountry, key: "country", type: "text" },
+              { label: "Website", value: website, setter: setWebsite, key: "website", type: "text", placeholder: "https://example.com" },
+            ].map((field) => (
+              <div className="field-line" key={field.key}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={visibility[field.key] || false}
+                    onChange={() => toggleVisibility(field.key)}
+                  />
+                  Show on Profile
+                </label>
 
-            <div className="checkbox-container">
-              <label>
-                <input type="checkbox" checked={contact} onChange={(e) => setContact(e.target.checked)} />
-                Contact Form Enable/Disable
-              </label>
-            </div>
-
-            <label>Description</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={450} />
-
-            <label>Biography</label>
-            <textarea value={biography} onChange={(e) => setBiography(e.target.value)} maxLength={2000} />
-
-            <label>Company Name</label>
-            <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} maxLength={100} />
-
-            <label>Street</label>
-            <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} maxLength={100} />
-
-            <label>State & City</label>
-            <input type="text" value={stateCity} onChange={(e) => setStateCity(e.target.value)} maxLength={100} />
-
-            <label>Country</label>
-            <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} maxLength={50} />
-
-            <label>Website</label>
-            <input type="text" value={website} onChange={(e) => setWebsite(e.target.value)} maxLength={200} placeholder="https://example.com" />
+                {field.type === "textarea" ? (
+                  <textarea value={field.value} onChange={(e) => field.setter(e.target.value)} maxLength={field.key === "description" ? 450 : 2000} />
+                ) : field.type === "checkbox" ? (
+                  <input type="checkbox" checked={field.value} onChange={(e) => field.setter(e.target.checked)} />
+                ) : (
+                  <input type={field.type} value={field.value} onChange={(e) => field.setter(e.target.value)} placeholder={field.placeholder || ""} />
+                )}
+              </div>
+            ))}
 
             <button className="save-btn" onClick={handleSave}>Save Changes</button>
           </div>

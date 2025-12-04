@@ -129,6 +129,20 @@
   resize: vertical;
 }
 
+/* Line wrapper for checkbox + field */
+.field-line {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.field-line label {
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* Center the checkbox */
 .checkbox-container {
   display: flex;
