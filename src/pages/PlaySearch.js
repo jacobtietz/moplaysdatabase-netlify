@@ -137,7 +137,6 @@ export default function PlaySearch() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleFilterMenu = () => setFilterOpen(!filterOpen);
   const firstLetter = user?.firstName?.charAt(0) || "";
   const restName = user ? `${user.firstName.slice(1)} ${user.lastName}` : "";
 
@@ -179,6 +178,7 @@ export default function PlaySearch() {
     if (newPage >= 1 && newPage <= totalPages && newPage !== page) fetchPlays(newPage);
   };
 
+  // ------------------- Reset Filters -------------------
   const resetFilters = () => {
     setSearch("");
     setGenre("");
@@ -202,30 +202,18 @@ export default function PlaySearch() {
 
   return (
     <div className="play-search-wrapper">
-      {/* --- Admin Button --- */}
-      {user && user.account === 4 && (
-        <button
-          className="admin-btn"
-          onClick={() => navigate("/admin/users")}
-          style={{
-            position: "fixed",
-            top: "10px",
-            left: "10px",
-            zIndex: 1000,
-            padding: "8px 12px",
-            backgroundColor: "#ff4d4f",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Administration
-        </button>
-      )}
-
       <header className="mpdb-header">
         <div className="search-user-container">
+          {/* Admin button */}
+          {user && user.account === 4 && (
+            <button
+              className="admin-btn"
+              onClick={() => navigate("/admin/users")}
+            >
+              Administration
+            </button>
+          )}
+
           <div className="search-bar">
             <input
               type="text"
@@ -260,7 +248,7 @@ export default function PlaySearch() {
         </div>
       </header>
 
-      {/* --- Filters and Results --- */}
+      {/* --- Filters --- */}
       <div className="search-filters">
         <select value={genre} onChange={(e) => setGenre(e.target.value)}>
           <option value="">Genre</option>
@@ -289,7 +277,11 @@ export default function PlaySearch() {
         </select>
 
         <div className="filter-wrapper">
-          <button type="button" className="filter-btn" onClick={() => setFilterOpen(!filterOpen)}>
+          <button
+            type="button"
+            className="filter-btn"
+            onClick={() => setFilterOpen(!filterOpen)}
+          >
             <FaFilter /> More Filters
           </button>
 
@@ -299,7 +291,6 @@ export default function PlaySearch() {
               
               <h3>Advanced Filters</h3>
               <div className="advanced-grid">
-                {/* Advanced filter inputs */}
                 <div className="filter-section">
                   <h4>Publication Dates</h4>
                   <label>From:</label>
@@ -351,6 +342,7 @@ export default function PlaySearch() {
           <button onClick={() => handlePageChange(page + 1)} disabled={page === totalPages}>Next</button>
         </div>
       )}
+
       <p className="results-count">
         Showing {shownResults} of {totalResults} results
       </p>
