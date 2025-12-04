@@ -1,98 +1,83 @@
-/* src/css/AdminUsers.css */
-
-.admin-page-wrapper {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  font-family: 'Arial', sans-serif;
+/* Wrapper */
+.admin-users-wrapper {
+  padding: 30px;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+.admin-users-wrapper h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2rem;
+  color: #222;
 }
 
-.admin-header h1 {
-  font-size: 28px;
-  color: #333;
-}
-
-.admin-header .create-user-btn {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.admin-header .create-user-btn:hover {
-  background-color: #0056b3;
-}
-
-.admin-table {
+/* Table */
+.admin-users-table {
   width: 100%;
   border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
 }
 
-.admin-table th,
-.admin-table td {
-  border: 1px solid #ddd;
-  padding: 12px 10px;
+.admin-users-table thead {
+  background: #343a40;
+  color: white;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  padding: 14px 16px;
   text-align: left;
+  border-bottom: 1px solid #e2e2e2;
 }
 
-.admin-table th {
-  background-color: #f4f4f4;
-  font-weight: 600;
+/* Last row no border */
+.admin-users-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.admin-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.admin-table tr:hover {
-  background-color: #e9ecef;
-}
-
-.admin-table .action-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.admin-table .edit-btn,
-.admin-table .delete-btn {
-  padding: 5px 10px;
+/* Buttons */
+.level-btn {
+  margin: 3px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  background: #007bff;
+  color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  transition: 0.2s;
 }
 
-.admin-table .edit-btn {
-  background-color: #ffc107;
-  color: #212529;
+.level-btn:disabled {
+  background: #6c757d;
+  cursor: default;
 }
 
-.admin-table .edit-btn:hover {
-  background-color: #e0a800;
+.level-btn:not(:disabled):hover {
+  background: #0062cc;
 }
 
-.admin-table .delete-btn {
-  background-color: #dc3545;
-  color: #fff;
+/* Delete button */
+.delete-user-btn {
+  padding: 7px 12px;
+  background: #dc3545;
+  color: white;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.admin-table .delete-btn:hover {
-  background-color: #c82333;
+.delete-user-btn:hover {
+  background: #c82333;
 }
 
-.no-users {
-  text-align: center;
-  margin-top: 50px;
-  font-size: 18px;
-  color: #666;
+/* Hover Row */
+.admin-users-table tbody tr:hover {
+  background: #f7f7f7;
 }
