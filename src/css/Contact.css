@@ -1,147 +1,134 @@
-/* ---------------- Font ---------------- */
-@font-face {
-    font-family: 'FigtreeVar';
-    src: url('../fonts/Figtree[wght].ttf') format('truetype');
-    font-weight: 100 900;
-    font-stretch: 75% 125%;
-}
-
-/* ---------------- Page Container ---------------- */
+/* Contact page container */
 .contact-page-container {
-    font-family: 'FigtreeVar', 'Figtree', sans-serif;
-    min-height: 50vh;
-    background-color: #EAEAEA; /* Light gray background */
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
-    color: #231F20; /* Dark text */
-    box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  min-height: 80vh;
+  background: #f7f8fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-@media (min-width: 768px) {
-    .contact-page-container {
-        padding: 2rem;
-    }
-}
-
-.subtitle {
-    font-size: 1.125rem;
-    color: #4b5563; /* text-gray-600 */
-    margin-bottom: 2rem;
-}
-
-/* ---------------- Card Structure ---------------- */
+/* Card styling */
 .contact-card {
-    width: 100%;
-    max-width: 700px;
-    background-color: white;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-    border-top: 8px solid #7366BD; /* Primary brand color */
-    box-sizing: border-box;
+  background: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  max-width: 700px;
+  width: 100%;
 }
 
-@media (min-width: 768px) {
-    .contact-card {
-        padding: 2.5rem;
-    }
+/* Header */
+.contact-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .contact-header h1 {
-    font-size: 2.25rem;
-    line-height: 2.5rem;
-    font-weight: 800;
-    color: #7366BD;
-    margin-bottom: 0.5rem;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 0.3rem;
 }
 
-/* ---------------- Form Styling ---------------- */
+.contact-header .subtitle {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Form grid */
 .form-grid {
-    display: grid;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+  display: grid;
+  grid-gap: 1rem 1.5rem;
 }
 
-@media (min-width: 640px) {
-    .form-grid.two-cols {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.form-grid.two-cols {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 1.5rem;
 }
 
+/* Form groups */
 .form-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-.form-label {
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #555;
 }
 
-.form-input, .form-textarea {
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-    resize: none;
-}
-
-.form-input:focus, .form-textarea:focus {
-    border-color: #7366BD;
-    box-shadow: 0 0 0 2px rgba(115, 102, 189, 0.2);
-}
-
+.form-input,
 .form-textarea {
-    min-height: 150px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
 }
 
-/* ---------------- Button ---------------- */
+.form-input:focus,
+.form-textarea:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+}
+
+/* Textarea */
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Submit button */
 .submit-button {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: white;
-    background-color: #7366BD;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.2s, opacity 0.2s;
-}
-
-.submit-button:hover:not(:disabled) {
-    background-color: #5d519e;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3f51b5;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-top: 0.5rem;
 }
 
 .submit-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  background-color: #a0a5c1;
+  cursor: not-allowed;
 }
 
-/* ---------------- Status Messages ---------------- */
+.submit-button:hover:not(:disabled) {
+  background-color: #334296;
+}
+
+/* Status messages */
 .status-message {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
 }
 
 .status-message.success {
-    background-color: #d1fae5;
-    color: #065f46;
-    border: 1px solid #34d399;
+  background-color: #e6f4ea;
+  color: #2e7d32;
+  border: 1px solid #2e7d32;
 }
 
 .status-message.error {
-    background-color: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #f87171;
+  background-color: #fdecea;
+  color: #c62828;
+  border: 1px solid #c62828;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  .form-grid.two-cols {
+    grid-template-columns: 1fr;
+  }
 }
