@@ -23,7 +23,7 @@ export default function PlaySearch() {
   const [user, setUser] = useState(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [expandedAbstract, setExpandedAbstract] = useState({});
-  const [enterCooldown, setEnterCooldown] = useState(false); 
+  const [enterCooldown, setEnterCooldown] = useState(false);
   const menuRef = useRef(null);
 
   const [advancedFilters, setAdvancedFilters] = useState({
@@ -41,49 +41,58 @@ export default function PlaySearch() {
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   // ------------------- Fetch Plays -------------------
-  const fetchPlays = useCallback(async (newPage = 1) => {
-    try {
-      const response = await axios.get(`${API_URL}/api/plays`, {
-        params: {
-          search: search.trim() || undefined,
-          genre: genre || undefined,
-          fundingType: fundingType || undefined,
-          organizationType: organizationType || undefined,
-          pubDateFrom: advancedFilters.pubDateFrom || undefined,
-          pubDateTo: advancedFilters.pubDateTo || undefined,
-          subDateFrom: advancedFilters.subDateFrom || undefined,
-          subDateTo: advancedFilters.subDateTo || undefined,
-          minDuration: advancedFilters.minDuration || undefined,
-          maxDuration: advancedFilters.maxDuration || undefined,
-          males: advancedFilters.males || undefined,
-          females: advancedFilters.females || undefined,
-          acts: advancedFilters.acts || undefined,
-          page: newPage,
-          limit: 10,
-        },
-        withCredentials: true,
-      });
+  const fetchPlays = useCallback(
+    async (newPage = 1) => {
+      try {
+        const response = await axios.get(`${API_URL}/api/plays`, {
+          params: {
+            search: search.trim() || undefined,
+            genre: genre || undefined,
+            fundingType: fundingType || undefined,
+            organizationType: organizationType || undefined,
+            pubDateFrom: advancedFilters.pubDateFrom || undefined,
+            pubDateTo: advancedFilters.pubDateTo || undefined,
+            subDateFrom: advancedFilters.subDateFrom || undefined,
+            subDateTo: advancedFilters.subDateTo || undefined,
+            minDuration: advancedFilters.minDuration || undefined,
+            maxDuration: advancedFilters.maxDuration || undefined,
+            males: advancedFilters.males || undefined,
+            females: advancedFilters.females || undefined,
+            acts: advancedFilters.acts || undefined,
+            page: newPage,
+            limit: 10,
+          },
+          withCredentials: true,
+        });
 
-      const data = response.data;
-      setPlays(data.plays || []);
-      setTotalResults(data.totalResults ?? data.total ?? 0);
-      setTotalPages(data.totalPages ?? Math.ceil((data.totalResults ?? data.total ?? 0) / 10));
-      setPage(newPage);
+        const data = response.data;
+        setPlays(data.plays || []);
+        setTotalResults(data.totalResults ?? data.total ?? 0);
+        setTotalPages(
+          data.totalPages ??
+            Math.ceil((data.totalResults ?? data.total ?? 0) / 10)
+        );
+        setPage(newPage);
 
-      navigate(`/plays/page/${newPage}`, { replace: true });
-    } catch (error) {
-      console.error("Error fetching plays:", error);
-      setPlays([]);
-      setTotalResults(0);
-      setTotalPages(0);
-      if (error.response?.status === 401) navigate("/login", { replace: true });
-    }
-  }, [search, genre, fundingType, organizationType, advancedFilters, navigate, API_URL]);
+        navigate(`/plays/page/${newPage}`, { replace: true });
+      } catch (error) {
+        console.error("Error fetching plays:", error);
+        setPlays([]);
+        setTotalResults(0);
+        setTotalPages(0);
+        if (error.response?.status === 401)
+          navigate("/login", { replace: true });
+      }
+    },
+    [search, genre, fundingType, organizationType, advancedFilters, navigate, API_URL]
+  );
 
   // ------------------- Auth Check -------------------
   const checkAuth = useCallback(async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
+      const res = await axios.get(`${API_URL}/api/users/profile`, {
+        withCredentials: true,
+      });
       if (!res.data.user) throw new Error("Not authenticated");
       setUser(res.data.user);
     } catch (err) {
@@ -110,7 +119,7 @@ export default function PlaySearch() {
       if (e.key === "Enter" && !enterCooldown) {
         fetchPlays(1);
         setEnterCooldown(true);
-        setTimeout(() => setEnterCooldown(false), 1000); 
+        setTimeout(() => setEnterCooldown(false), 1000);
       }
     };
     document.addEventListener("keydown", handleGlobalEnter);
@@ -120,7 +129,8 @@ export default function PlaySearch() {
   // ------------------- Click Outside Menu -------------------
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) setUserMenuOpen(false);
+      if (menuRef.current && !menuRef.current.contains(event.target))
+        setUserMenuOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -140,7 +150,9 @@ export default function PlaySearch() {
     }
   };
 
-  const toggleAbstract = (id) => setExpandedAbstract((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggleAbstract = (id) =>
+    setExpandedAbstract((prev) => ({ ...prev, [id]: !prev[id] }));
+
   const handleAdvancedChange = (e) => {
     const { name, value } = e.target;
     setAdvancedFilters((prev) => ({ ...prev, [name]: value }));
@@ -150,7 +162,7 @@ export default function PlaySearch() {
     if (!enterCooldown) {
       fetchPlays(1);
       setEnterCooldown(true);
-      setTimeout(() => setEnterCooldown(false), 1000); 
+      setTimeout(() => setEnterCooldown(false), 1000);
     }
   };
 
@@ -185,7 +197,12 @@ export default function PlaySearch() {
 
           {user && (
             <div className="user-section1" ref={menuRef}>
-              <div className="user-icon-circle" onClick={() => setUserMenuOpen(!userMenuOpen)}>{firstLetter}</div>
+              <div
+                className="user-icon-circle"
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+              >
+                {firstLetter}
+              </div>
               <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
               {userMenuOpen && (
                 <div className="user-dropdown">
@@ -210,58 +227,70 @@ export default function PlaySearch() {
           <option value="Tragedy">Tragedy</option>
           <option value="Mystery">Mystery</option>
         </select>
+
         <select value={fundingType} onChange={(e) => setFundingType(e.target.value)}>
           <option value="">Funding Type</option>
           <option value="Paid">Paid</option>
           <option value="Donated">Donated</option>
         </select>
+
         <select value={organizationType} onChange={(e) => setOrganizationType(e.target.value)}>
           <option value="">Organization Type</option>
-            <option value="Elementary">Elementary</option>
-            <option value="Middle School">Middle School</option>
-            <option value="High School">High School</option>
-            <option value="University">University</option>
-            <option value="Community">Community</option>
-            <option value="Professional">Professional</option>
+          <option value="Elementary">Elementary</option>
+          <option value="Middle School">Middle School</option>
+          <option value="High School">High School</option>
+          <option value="University">University</option>
+          <option value="Community">Community</option>
+          <option value="Professional">Professional</option>
         </select>
 
         <div className="filter-wrapper">
-          <button type="button" className="filter-btn" onClick={toggleFilterMenu}><FaFilter /> More Filters</button>
+          <button type="button" className="filter-btn" onClick={toggleFilterMenu}>
+            <FaFilter /> More Filters
+          </button>
+
           {filterOpen && (
-            <div className="filter-dropdown expanded">
+            <div className="filter-dropdown expanded-large">
               <h3>Advanced Filters</h3>
-              <div className="filter-group">
-                <label>Publication Date Range:</label>
-                <input type="date" name="pubDateFrom" value={advancedFilters.pubDateFrom} onChange={handleAdvancedChange} />
-                <input type="date" name="pubDateTo" value={advancedFilters.pubDateTo} onChange={handleAdvancedChange} />
-              </div>
-              <div className="filter-group">
-                <label>Submission Date Range:</label>
-                <input type="date" name="subDateFrom" value={advancedFilters.subDateFrom} onChange={handleAdvancedChange} />
-                <input type="date" name="subDateTo" value={advancedFilters.subDateTo} onChange={handleAdvancedChange} />
-              </div>
-              <div className="filter-group">
-                <label>Duration (Minutes):</label>
-<input
-  type="number"
-  name="minDuration"
-  value={advancedFilters.minDuration}
-  onChange={handleAdvancedChange}
-  placeholder="Min" // this text shows when empty
-  style={{
-    color: advancedFilters.minDuration ? "#000" : "#888", // dark text when typing, gray when empty
-  }}
-/>
-                <input type="number" name="maxDuration" placeholder="Max" value={advancedFilters.maxDuration} onChange={handleAdvancedChange} />
-              </div>
-              <div className="filter-group">
-                <label>Cast Requirement:</label>
-                <input type="number" name="males" placeholder="Men" value={advancedFilters.males} onChange={handleAdvancedChange} />
-                <input type="number" name="females" placeholder="Women" value={advancedFilters.females} onChange={handleAdvancedChange} />
-              </div>
-              <div className="filter-group">
-                <label>Number of Acts:</label>
-                <input type="number" name="acts" placeholder="e.g. 3" value={advancedFilters.acts} onChange={handleAdvancedChange} />
+
+              <div className="advanced-grid">
+                <div className="filter-section">
+                  <h4>Publication Dates</h4>
+                  <label>From:</label>
+                  <input type="date" name="pubDateFrom" value={advancedFilters.pubDateFrom} onChange={handleAdvancedChange} />
+                  <label>To:</label>
+                  <input type="date" name="pubDateTo" value={advancedFilters.pubDateTo} onChange={handleAdvancedChange} />
+                </div>
+
+                <div className="filter-section">
+                  <h4>Submission Dates</h4>
+                  <label>From:</label>
+                  <input type="date" name="subDateFrom" value={advancedFilters.subDateFrom} onChange={handleAdvancedChange} />
+                  <label>To:</label>
+                  <input type="date" name="subDateTo" value={advancedFilters.subDateTo} onChange={handleAdvancedChange} />
+                </div>
+
+                <div className="filter-section">
+                  <h4>Duration (Minutes)</h4>
+                  <label>Min:</label>
+                  <input type="number" name="minDuration" placeholder="Min" value={advancedFilters.minDuration} onChange={handleAdvancedChange} />
+                  <label>Max:</label>
+                  <input type="number" name="maxDuration" placeholder="Max" value={advancedFilters.maxDuration} onChange={handleAdvancedChange} />
+                </div>
+
+                <div className="filter-section">
+                  <h4>Cast Requirements</h4>
+                  <label>Men:</label>
+                  <input type="number" name="males" placeholder="Men" value={advancedFilters.males} onChange={handleAdvancedChange} />
+                  <label>Women:</label>
+                  <input type="number" name="females" placeholder="Women" value={advancedFilters.females} onChange={handleAdvancedChange} />
+                </div>
+
+                <div className="filter-section">
+                  <h4>Acts</h4>
+                  <label>Number of Acts:</label>
+                  <input type="number" name="acts" placeholder="e.g. 3" value={advancedFilters.acts} onChange={handleAdvancedChange} />
+                </div>
               </div>
             </div>
           )}

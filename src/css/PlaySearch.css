@@ -15,7 +15,6 @@
   padding: 10px 10px;
 }
 
-
 /* --- Search + User Section --- */
 .search-user-container {
   display: flex;
@@ -112,40 +111,93 @@
   background-color: #3c5268;
 }
 
+/* --- Advanced Filter Panel --- */
 .filter-dropdown {
   position: absolute;
   top: 48px;
   right: 0;
-  background: white;
+  background: #fff;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 14px 18px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  width: 260px;
-  animation: fadeIn 0.2s ease;
+  width: 400px;
+  max-width: 90vw;
+  animation: fadeIn 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
+/* Headings inside the dropdown */
 .filter-dropdown h3 {
   margin-top: 0;
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #333;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
 }
 
+/* Grouped sections */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.filter-group:last-child {
+  border-bottom: none;
+}
+
+/* Label + input styling */
 .filter-dropdown label {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #333;
-  margin-bottom: 6px;
 }
 
-.filter-dropdown input {
+.filter-dropdown input,
+.filter-dropdown select {
+  margin-left: 10px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  flex: 1;
+}
+
+/* Checkbox styling */
+.filter-dropdown input[type="checkbox"] {
+  margin-left: 0;
   margin-right: 8px;
+  transform: scale(1.1);
 }
 
+/* Apply button for filters */
+.filter-dropdown .apply-filters-btn {
+  background-color: #506d8b;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  align-self: flex-end;
+  transition: background 0.2s ease;
+}
+
+.filter-dropdown .apply-filters-btn:hover {
+  background-color: #3c5268;
+}
+
+/* Fade-in animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
