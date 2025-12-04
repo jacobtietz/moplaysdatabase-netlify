@@ -1,5 +1,5 @@
 // src/pages/PlaySearch.js
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import "../App.css";
 import "../css/PlaySearch.css";
@@ -41,8 +41,7 @@ export default function PlaySearch() {
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   // ------------------- Fetch Plays -------------------
-  const fetchPlays = async (newPage = 1) => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchPlays = useCallback(async (newPage = 1) => {
     try {
       const response = await axios.get(`${API_URL}/api/plays`, {
         params: {
@@ -79,10 +78,10 @@ export default function PlaySearch() {
       setTotalPages(0);
       if (error.response?.status === 401) navigate("/login", { replace: true });
     }
-  };
+  }, [search, genre, fundingType, organizationType, advancedFilters, navigate, API_URL]);
 
   // ------------------- Auth Check -------------------
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const res = await axios.get(`${API_URL}/api/users/profile`, { withCredentials: true });
       if (!res.data.user) throw new Error("Not authenticated");
@@ -90,10 +89,9 @@ export default function PlaySearch() {
     } catch (err) {
       navigate("/login", { replace: true });
     }
-  };
+  }, [navigate, API_URL]);
 
   // ------------------- Populate search from URL -------------------
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     document.title = "MPDB";
 
@@ -104,8 +102,7 @@ export default function PlaySearch() {
     setSearch(searchQuery);
 
     fetchPlays(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
+  }, [location.search, fetchPlays, checkAuth]);
 
   // ------------------- Global Enter Key Listener -------------------
   useEffect(() => {
@@ -118,7 +115,7 @@ export default function PlaySearch() {
     };
     document.addEventListener("keydown", handleGlobalEnter);
     return () => document.removeEventListener("keydown", handleGlobalEnter);
-  }, [enterCooldown]);
+  }, [enterCooldown, fetchPlays]);
 
   // ------------------- Click Outside Menu -------------------
   useEffect(() => {
@@ -313,7 +310,7 @@ export default function PlaySearch() {
                     )}
                   </p>
 
-                  {/* --- UPDATED LINE --- */}
+                  {/* Updated line to include organization type next to actors */}
                   <p className="play-details">
                     {play.genre || "-"} | {play.duration || 0} Minutes | {play.males || 0} M, {play.females || 0} W | {play.total || 0} Total Actors | {play.organizationType || "-"}
                   </p>
@@ -321,6 +318,7 @@ export default function PlaySearch() {
                   <p className="play-meta">
                     {play.funding || "-"} | {play.acts || "-"} Acts | Publication Date: {play.publicationDate ? new Date(play.publicationDate).toLocaleDateString() : "-"} | Submission Date: {play.submissionDate ? new Date(play.submissionDate).toLocaleDateString() : "-"}
                   </p>
+
                   <p className={`play-abstract ${expandedAbstract[play._id] ? "expanded" : ""}`}>
                     {play.abstract || "No abstract available"}
                   </p>
