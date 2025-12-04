@@ -136,13 +136,18 @@ export default function Settings() {
             {firstLetter}
           </div>
           <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
-          {userMenuOpen && (
-            <div className="user-dropdown">
-              <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
-              <button onClick={() => navigate("/settings")}>Settings</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
+{userMenuOpen && (
+  <div className="user-dropdown">
+    {/* Only show Profile for Playwright/Admin (account >= 2) */}
+    {user.account >= 2 && (
+      <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
+    )}
+    
+    {/* Settings and Logout always visible */}
+    <button onClick={() => navigate("/settings")}>Settings</button>
+    <button onClick={handleLogout}>Logout</button>
+  </div>
+)}
         </div>
       </header>
 
