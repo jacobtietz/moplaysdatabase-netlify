@@ -105,3 +105,11 @@
   background-color: #f8d7da;
   border: 1px solid #f5c6cb;
 }
+
+/* Fix file upload buttons being invisible */
+.create-play-form input[type="file"] {
+  appearance: auto !important;
+  padding: 0.4rem !important;
+  border: none !important;
+  background-color: transparent !important;
+}

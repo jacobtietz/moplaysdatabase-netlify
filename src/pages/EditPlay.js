@@ -18,13 +18,13 @@ export default function EditPlay() {
     females: "",
     funding: "Donated",
     coverImage: null,
-    playFile: null, // <<< ADDED
+    playFile: null,
     abstract: "",
     genre: "Comedy",
     organizationType: "University",
   });
 
-  const [existingPlayFile, setExistingPlayFile] = useState(null); // <<< ADDED
+  const [existingPlayFile, setExistingPlayFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [currentUser, setCurrentUser] = useState(null);
@@ -76,14 +76,14 @@ export default function EditPlay() {
           females: play.females || "",
           funding: play.funding || "Donated",
           coverImage: null,
-          playFile: null, // user can replace
+          playFile: null,
           abstract: play.abstract || "",
           genre: play.genre || "Comedy",
           organizationType: play.organizationType || "University",
         });
 
         setImagePreview(play.coverImage || null);
-        setExistingPlayFile(play.playFile || null); // <<< ADDED
+        setExistingPlayFile(play.playFile || null);
       } catch (err) {
         setMessage({ text: "Failed to load play.", type: "error" });
       }
@@ -132,9 +132,7 @@ export default function EditPlay() {
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
 
-    // File inputs
     if (files && files[0]) {
-      // Cover image
       if (name === "coverImage") {
         try {
           const resized = await resizeImage(files[0], 200, 250);
@@ -143,10 +141,7 @@ export default function EditPlay() {
         } catch {
           setMessage({ text: "Image resize failed.", type: "error" });
         }
-      }
-
-      // Play sample file (PDF/DOCX)
-      else if (name === "playFile") {
+      } else if (name === "playFile") {
         const file = files[0];
         const allowed = [
           "application/pdf",
@@ -154,18 +149,19 @@ export default function EditPlay() {
         ];
 
         if (!allowed.includes(file.type)) {
-          setMessage({ text: "Only PDF or DOCX files are allowed.", type: "error" });
+          setMessage({
+            text: "Only PDF or DOCX files are allowed.",
+            type: "error",
+          });
           return;
         }
 
         setFormData({ ...formData, playFile: file });
-        setExistingPlayFile(null); // user is replacing file
+        setExistingPlayFile(null);
       }
-
       return;
     }
 
-    // Normal inputs
     setFormData({ ...formData, [name]: value });
   };
 
@@ -193,14 +189,12 @@ export default function EditPlay() {
     try {
       const data = new FormData();
 
-      // Append all values
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null && value !== "") {
           data.append(key, value);
         }
       });
 
-      // PUT request
       await axios.put(`${API_URL}/api/plays/${id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
@@ -319,22 +313,8 @@ export default function EditPlay() {
           <input type="file" name="coverImage" accept="image/*" onChange={handleChange} />
 
           {imagePreview && (
-            <div
-              className="image-preview"
-              style={{
-                width: "200px",
-                height: "250px",
-                borderRadius: "6px",
-                overflow: "hidden",
-                border: "1px solid #ccc",
-                marginTop: "10px",
-              }}
-            >
-              <img
-                src={imagePreview}
-                alt="Preview"
-                style={{ width: "200px", height: "250px", objectFit: "cover" }}
-              />
+            <div className="image-preview">
+              <img src={imagePreview} alt="Preview" />
             </div>
           )}
 
