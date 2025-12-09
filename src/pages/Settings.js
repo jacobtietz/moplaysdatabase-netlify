@@ -34,17 +34,17 @@ export default function Settings() {
         if (!res.data.user) throw new Error("Not authenticated");
         const u = res.data.user;
         setUser(u);
-        setFirstName(u.firstName || "");
-        setLastName(u.lastName || "");
+        setFirstName(u.firstName || " ");
+        setLastName(u.lastName || " ");
         setProfilePic(u.profile?.profilePicture || null);
-        setPhone(u.phone || "");
-        setDescription(u.profile?.description || "");
-        setBiography(u.profile?.biography || "");
-        setCompanyName(u.profile?.companyName || "");
-        setStreet(u.profile?.street || "");
-        setStateCity(u.profile?.stateCity || "");
-        setCountry(u.profile?.country || "");
-        setWebsite(u.profile?.website || "");
+        setPhone(u.phone || " ");
+        setDescription(u.profile?.description || " ");
+        setBiography(u.profile?.biography || " ");
+        setCompanyName(u.profile?.companyName || " ");
+        setStreet(u.profile?.street || " ");
+        setStateCity(u.profile?.stateCity || " ");
+        setCountry(u.profile?.country || " ");
+        setWebsite(u.profile?.website || " ");
         setContact(u.contact || false);
       } catch (err) {
         navigate("/login", { replace: true });
@@ -88,34 +88,48 @@ export default function Settings() {
   const handleSave = async () => {
     try {
       const formData = new FormData();
-      formData.append("firstName", firstName.substring(0, 20));
-      formData.append("lastName", lastName.substring(0, 20));
-      formData.append("phone", phone || "");
-      formData.append("description", description.substring(0, 450));
-      formData.append("biography", biography.substring(0, 2000));
-      formData.append("companyName", companyName);
-      formData.append("street", street);
-      formData.append("stateCity", stateCity);
-      formData.append("country", country);
-      formData.append("website", website);
+
+      // Ensure every field has at least a space
+      formData.append("firstName", firstName.trim() || " ");
+      formData.append("lastName", lastName.trim() || " ");
+      formData.append("phone", phone.trim() || " ");
       formData.append("contact", contact ? 1 : 0);
-      if (profilePic) formData.append("profilePicture", profilePic);
+
+      // Nested profile object
+      const profileData = {
+        description: description.trim() || " ",
+        biography: biography.trim() || " ",
+        companyName: companyName.trim() || " ",
+        street: street.trim() || " ",
+        stateCity: stateCity.trim() || " ",
+        country: country.trim() || " ",
+        website: website.trim() || " ",
+      };
+
+      // If profilePic is a new File, append it separately
+      if (profilePic) {
+        formData.append("profilePicture", profilePic);
+      }
+
+      // Append nested profile as JSON string for backend parsing
+      formData.append("profile", JSON.stringify(profileData));
 
       const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
         withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
       });
+
       alert("Profile updated!");
       setUser(res.data.user);
     } catch (err) {
-  if (err.response) {
-    console.error("Backend error:", err.response.data);
-    alert("Failed to save changes: " + err.response.data.message);
-  } else {
-    console.error("Network or client error:", err);
-    alert("Failed to save changes.");
-  }
-}
-
+      if (err.response) {
+        console.error("Backend error:", err.response.data);
+        alert("Failed to save changes: " + err.response.data.message);
+      } else {
+        console.error("Network or client error:", err);
+        alert("Failed to save changes.");
+      }
+    }
   };
 
   if (loading) return <p>Loading...</p>;
@@ -136,18 +150,15 @@ export default function Settings() {
             {firstLetter}
           </div>
           <span onClick={() => setUserMenuOpen(!userMenuOpen)}>{restName}</span>
-{userMenuOpen && (
-  <div className="user-dropdown">
-    {/* Only show Profile for Playwright/Admin (account >= 2) */}
-    {user.account >= 2 && (
-      <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
-    )}
-    
-    {/* Settings and Logout always visible */}
-    <button onClick={() => navigate("/settings")}>Settings</button>
-    <button onClick={handleLogout}>Logout</button>
-  </div>
-)}
+          {userMenuOpen && (
+            <div className="user-dropdown">
+              {user.account >= 2 && (
+                <button onClick={() => navigate(`/profile/${user._id}`)}>Profile</button>
+              )}
+              <button onClick={() => navigate("/settings")}>Settings</button>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          )}
         </div>
       </header>
 
