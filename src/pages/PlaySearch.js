@@ -40,7 +40,6 @@ export default function PlaySearch() {
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // ------------------- Fetch Plays -------------------
   const fetchPlays = useCallback(
     async (newPage = 1) => {
       try {
@@ -87,7 +86,6 @@ export default function PlaySearch() {
     [search, genre, fundingType, organizationType, advancedFilters, navigate, API_URL]
   );
 
-  // ------------------- Auth Check -------------------
   const checkAuth = useCallback(async () => {
     try {
       const res = await axios.get(`${API_URL}/api/users/profile`, {
@@ -100,7 +98,6 @@ export default function PlaySearch() {
     }
   }, [navigate, API_URL]);
 
-  // ------------------- Populate search from URL -------------------
   useEffect(() => {
     document.title = "MPDB";
 
@@ -113,7 +110,6 @@ export default function PlaySearch() {
     fetchPlays(parseInt(pageParam) || 1);
   }, [location.search, fetchPlays, checkAuth, pageParam]);
 
-  // ------------------- Global Enter Key Listener -------------------
   useEffect(() => {
     const handleGlobalEnter = (e) => {
       if (e.key === "Enter" && !enterCooldown) {
@@ -126,7 +122,6 @@ export default function PlaySearch() {
     return () => document.removeEventListener("keydown", handleGlobalEnter);
   }, [enterCooldown, fetchPlays]);
 
-  // ------------------- Click Outside Menu -------------------
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target))
@@ -177,7 +172,6 @@ export default function PlaySearch() {
     if (newPage >= 1 && newPage <= totalPages && newPage !== page) fetchPlays(newPage);
   };
 
-  // ------------------- Reset Filters -------------------
   const resetFilters = () => {
     setSearch("");
     setGenre("");
@@ -199,10 +193,11 @@ export default function PlaySearch() {
 
   const shownResults = Math.min(page * 10, totalResults);
 
-  // ------------------- Play Sample Request -------------------
   const handlePlaySample = async (play) => {
     try {
-      const response = await axios.get(`${API_URL}/api/plays/${play._id}/sample`);
+      const response = await axios.get(`${API_URL}/api/plays/${play._id}/sample`, {
+        withCredentials: true,
+      });
       if (!response.data || !response.data.sampleUrl) {
         alert("There is no available play sample");
         return;
@@ -221,7 +216,7 @@ export default function PlaySearch() {
       }
     } catch (err) {
       console.error("Error fetching play sample:", err);
-      alert("Error fetching play sample");
+      alert(err.response?.data?.message || "Error fetching play sample");
     }
   };
 
