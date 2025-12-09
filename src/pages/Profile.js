@@ -138,7 +138,7 @@ export default function Profile() {
             </>
           )}
 
-          {profile.contact === 1 && (
+          {Number(profile.contact) === 1 && (
             <>
               <span className="link-divider">|</span>
               <span
