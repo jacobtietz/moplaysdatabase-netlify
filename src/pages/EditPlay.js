@@ -213,7 +213,7 @@ export default function EditPlay() {
 
     try {
       await axios.delete(`${API_URL}/api/plays/${id}`, { withCredentials: true });
-      navigate("/plays"); // redirect to play list
+      navigate("/plays"); // redirect to play list after deletion
     } catch (err) {
       const msg = err.response?.data?.message || "Failed to delete play.";
       setMessage({ text: msg, type: "error" });
@@ -235,15 +235,12 @@ export default function EditPlay() {
 
       {currentUser && (currentUser.account === 3 || currentUser.account === 4) ? (
         <form className="create-play-form" onSubmit={handleSubmit}>
-          {/* Title */}
           <label>Title</label>
           <input type="text" name="title" value={formData.title} onChange={handleChange} required />
 
-          {/* Publication Date */}
           <label>Publication Date</label>
           <input type="date" name="publicationDate" value={formData.publicationDate} onChange={handleChange} />
 
-          {/* Acts */}
           <label>Acts</label>
           <input
             type="text"
@@ -253,7 +250,6 @@ export default function EditPlay() {
             onKeyDown={(e) => handleNumericKey(e, 2)}
           />
 
-          {/* Duration */}
           <label>Duration (minutes)</label>
           <input
             type="text"
@@ -264,7 +260,6 @@ export default function EditPlay() {
             required
           />
 
-          {/* Total Actors */}
           <label>Total Actors</label>
           <input
             type="text"
@@ -275,7 +270,6 @@ export default function EditPlay() {
             required
           />
 
-          {/* Males */}
           <label>Male Actors</label>
           <input
             type="text"
@@ -285,7 +279,6 @@ export default function EditPlay() {
             onKeyDown={(e) => handleNumericKey(e, 2)}
           />
 
-          {/* Females */}
           <label>Female Actors</label>
           <input
             type="text"
@@ -295,14 +288,12 @@ export default function EditPlay() {
             onKeyDown={(e) => handleNumericKey(e, 2)}
           />
 
-          {/* Funding */}
           <label>Funding</label>
           <select name="funding" value={formData.funding} onChange={handleChange}>
             <option value="Donated">Donated</option>
             <option value="Paid">Paid</option>
           </select>
 
-          {/* Organization Type */}
           <label>Organization Type</label>
           <select
             name="organizationType"
@@ -318,7 +309,6 @@ export default function EditPlay() {
             <option value="Professional">Professional</option>
           </select>
 
-          {/* Genre */}
           <label>Genre</label>
           <select name="genre" value={formData.genre} onChange={handleChange} required>
             <option value="Comedy">Comedy</option>
@@ -329,7 +319,6 @@ export default function EditPlay() {
             <option value="Mystery">Mystery</option>
           </select>
 
-          {/* Cover Image */}
           <label>Image File</label>
           <input type="file" name="coverImage" accept="image/*" onChange={handleChange} />
           {imagePreview && (
@@ -338,11 +327,9 @@ export default function EditPlay() {
             </div>
           )}
 
-          {/* Play Sample File */}
           <label>Play Sample File (PDF/DOCX)</label>
           <input type="file" name="playFile" accept=".pdf,.docx" onChange={handleChange} />
 
-          {/* Display existing or new file */}
           {existingPlayFile && !formData.playFile && (
             <p style={{ marginTop: "5px" }}>
               Current File: <strong>{getExistingFileName(existingPlayFile)}</strong>
@@ -354,7 +341,6 @@ export default function EditPlay() {
             </p>
           )}
 
-          {/* Abstract */}
           <label>Abstract</label>
           <textarea name="abstract" value={formData.abstract} onChange={handleChange} />
 
