@@ -7,6 +7,16 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  // Define the account levels you want to show
+  const accountLevels = {
+    0: "User",
+    1: "Locked",
+    3: "Playwright",
+    4: "Administrator",
+  };
+
+  const levelOptions = Object.keys(accountLevels).map(Number); // [0, 1, 3, 4]
+
   // Fetch all users from DB
   const fetchUsers = useCallback(async () => {
     try {
@@ -16,11 +26,7 @@ export default function AdminUsers() {
 
       console.log("Fetched users:", res.data);
 
-      // Support both formats: { users: [] } or [user, user]
-      const userList = Array.isArray(res.data)
-        ? res.data
-        : res.data.users || [];
-
+      const userList = Array.isArray(res.data) ? res.data : res.data.users || [];
       setUsers(userList);
     } catch (err) {
       console.error("Failed to fetch users:", err);
@@ -81,17 +87,17 @@ export default function AdminUsers() {
             <tr key={user._id}>
               <td>{user.firstName} {user.lastName}</td>
               <td>{user.email}</td>
-              <td>{user.account}</td>
+              <td>{accountLevels[user.account] || "Unknown"}</td>
 
               <td>
-                {[0, 1, 2, 3, 4].map((level) => (
+                {levelOptions.map((level) => (
                   <button
                     key={level}
                     className="level-btn"
                     disabled={user.account === level}
                     onClick={() => handleAccountChange(user._id, level)}
                   >
-                    Set {level}
+                    {accountLevels[level]}
                   </button>
                 ))}
               </td>
