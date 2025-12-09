@@ -5,6 +5,7 @@ import "../css/AdminUsers.css";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // <-- new state
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   // Account level mapping
@@ -14,16 +15,12 @@ export default function AdminUsers() {
     3: "Playwright",
     4: "Administrator",
   };
-
   const levelOptions = Object.keys(accountLevels).map(Number); // [0, 1, 3, 4]
 
   // Fetch all users from DB
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/users`, {
-        withCredentials: true,
-      });
-
+      const res = await axios.get(`${API_URL}/api/users`, { withCredentials: true });
       const userList = Array.isArray(res.data) ? res.data : res.data.users || [];
       setUsers(userList);
     } catch (err) {
@@ -42,7 +39,6 @@ export default function AdminUsers() {
     const confirmChange = window.confirm(
       `Are you sure you want to change this user's account level from "${accountLevels[currentLevel]}" to "${accountLevels[newLevel]}"?`
     );
-
     if (!confirmChange) return;
 
     try {
@@ -51,8 +47,7 @@ export default function AdminUsers() {
         { account: newLevel },
         { withCredentials: true }
       );
-
-      fetchUsers(); // refresh list after change
+      fetchUsers();
     } catch (err) {
       console.error("Failed to update account level:", err);
       alert("Failed to update account level. Check console for details.");
@@ -71,9 +66,27 @@ export default function AdminUsers() {
     }
   };
 
+  // Filter users based on search term
+  const filteredUsers = users.filter((user) => {
+    const search = searchTerm.toLowerCase();
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const email = user.email.toLowerCase();
+    return fullName.includes(search) || email.includes(search);
+  });
+
   return (
     <div className="admin-users-wrapper">
       <h1>Admin User Management</h1>
+
+      {/* Search bar */}
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="admin-search-bar"
+        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }}
+      />
 
       <table className="admin-users-table">
         <thead>
@@ -87,7 +100,7 @@ export default function AdminUsers() {
         </thead>
 
         <tbody>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <tr key={user._id}>
               <td>{user.firstName} {user.lastName}</td>
               <td>{user.email}</td>
