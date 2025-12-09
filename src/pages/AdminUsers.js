@@ -7,13 +7,21 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // Fetch all users from MoPlays DB
+  // Fetch all users from DB
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/admin/users`, {
+      const res = await axios.get(`${API_URL}/api/users`, {
         withCredentials: true,
       });
-      setUsers(res.data.users || []);
+
+      console.log("Fetched users:", res.data);
+
+      // Support both formats: { users: [] } or [user, user]
+      const userList = Array.isArray(res.data)
+        ? res.data
+        : res.data.users || [];
+
+      setUsers(userList);
     } catch (err) {
       console.error("Failed to fetch users:", err);
     }
@@ -23,14 +31,15 @@ export default function AdminUsers() {
     fetchUsers();
   }, [fetchUsers]);
 
-  // Update account level
+  // Update user account level
   const handleAccountChange = async (id, newLevel) => {
     try {
       await axios.put(
-        `${API_URL}/api/admin/users/${id}/account`,
+        `${API_URL}/api/users/${id}/account`,
         { account: newLevel },
         { withCredentials: true }
       );
+
       fetchUsers();
     } catch (err) {
       console.error("Failed to update account level:", err);
@@ -42,9 +51,10 @@ export default function AdminUsers() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axios.delete(`${API_URL}/api/admin/users/${id}`, {
+      await axios.delete(`${API_URL}/api/users/${id}`, {
         withCredentials: true,
       });
+
       fetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
@@ -69,9 +79,7 @@ export default function AdminUsers() {
         <tbody>
           {users.map((user) => (
             <tr key={user._id}>
-              <td>
-                {user.firstName} {user.lastName}
-              </td>
+              <td>{user.firstName} {user.lastName}</td>
               <td>{user.email}</td>
               <td>{user.account}</td>
 
