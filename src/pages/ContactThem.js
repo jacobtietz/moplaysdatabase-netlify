@@ -61,11 +61,12 @@ const ContactThem = () => {
     }
 
     // FRONTEND CHECK: prevent sending if target user contact === 0
-    if (targetUser?.contact !== 1) {
-      setErrorMsg("This user is not accepting messages at this time.");
-      setSubmissionStatus("error");
-      return;
-    }
+if (Number(targetUser?.contact) !== 1) {
+  setErrorMsg("This user is not accepting messages at this time.");
+  setSubmissionStatus("error");
+  return;
+}
+
 
     try {
       await axios.post(
