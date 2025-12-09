@@ -20,7 +20,7 @@ export default function AdminUsers() {
   // Fetch all users from DB
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/admin/users`, { withCredentials: true });
+      const res = await axios.get(`${API_URL}/api/users`, { withCredentials: true });
       const userList = Array.isArray(res.data) ? res.data : res.data.users || [];
       setUsers(userList);
     } catch (err) {
@@ -43,7 +43,7 @@ export default function AdminUsers() {
 
     try {
       await axios.put(
-        `${API_URL}/api/admin/users/${id}/account`,
+        `${API_URL}/api/users/${id}/account`,
         { account: newLevel },
         { withCredentials: true }
       );
