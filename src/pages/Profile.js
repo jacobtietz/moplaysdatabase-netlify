@@ -130,21 +130,25 @@ export default function Profile() {
           >
             view plays »
           </a>
-          <span className="link-divider">|</span>
+
           {currentUser?.account > 1 && (
             <>
-              <a href="/plays/create" className="profile-link">submit your play »</a>
               <span className="link-divider">|</span>
+              <a href="/plays/create" className="profile-link">submit your play »</a>
             </>
           )}
+
           {profile.contact === 1 && (
-            <span
-              className="profile-link"
-              style={{ cursor: "pointer", textDecoration: "underline" }}
-              onClick={() => navigate(`/contact/${user._id}`)}
-            >
-              contact »
-            </span>
+            <>
+              <span className="link-divider">|</span>
+              <span
+                className="profile-link"
+                style={{ cursor: "pointer", textDecoration: "underline" }}
+                onClick={() => navigate(`/contact/${user._id}`)}
+              >
+                contact »
+              </span>
+            </>
           )}
         </div>
 
@@ -157,7 +161,6 @@ export default function Profile() {
           <p>{profile.companyName || "No company listed."}</p>
           <p>{profile.street && profile.stateCity ? `${profile.street}, ${profile.stateCity}` : "No address provided."}</p>
           <p>{profile.country || "No country specified."}</p>
-          {/* Email and phone removed */}
           {profile.website ? (
             <p>
               <a
