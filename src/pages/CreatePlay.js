@@ -16,6 +16,7 @@ export default function CreatePlay() {
     females: "",
     funding: "Donated",
     coverImage: null,
+    playFile: null, // <<< ADDED for PDF/DOCX
     abstract: "",
     genre: "Comedy",
     organizationType: "University", // <<< ADDED
@@ -80,7 +81,7 @@ export default function CreatePlay() {
               }
             },
             "image/jpeg",
-            0.8 // compression quality
+            0.8
           );
         };
         img.onerror = reject;
@@ -93,16 +94,33 @@ export default function CreatePlay() {
   // ------------------- Form Handlers -------------------
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
-    if (files && files[0]) {
-      try {
-        const resized = await resizeImage(files[0], 200, 250);
-        setFormData({ ...formData, [name]: resized });
 
-        const previewUrl = URL.createObjectURL(resized);
-        setImagePreview(previewUrl);
-      } catch (error) {
-        console.error("Image resize failed:", error);
-        setMessage({ text: "Image resize failed.", type: "error" });
+    if (files && files[0]) {
+      // Image upload
+      if (name === "coverImage") {
+        try {
+          const resized = await resizeImage(files[0], 200, 250);
+          setFormData({ ...formData, [name]: resized });
+
+          const previewUrl = URL.createObjectURL(resized);
+          setImagePreview(previewUrl);
+        } catch (error) {
+          console.error("Image resize failed:", error);
+          setMessage({ text: "Image resize failed.", type: "error" });
+        }
+      }
+      // Play file upload (PDF/DOCX)
+      else if (name === "playFile") {
+        const file = files[0];
+        const allowedTypes = [
+          "application/pdf",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
+        if (!allowedTypes.includes(file.type)) {
+          setMessage({ text: "Only PDF or DOCX files are allowed.", type: "error" });
+          return;
+        }
+        setFormData({ ...formData, [name]: file });
       }
     } else {
       setFormData({ ...formData, [name]: value });
@@ -170,9 +188,10 @@ export default function CreatePlay() {
         females: "",
         funding: "Donated",
         coverImage: null,
+        playFile: null, // <<< reset play file
         abstract: "",
         genre: "Comedy",
-        organizationType: "University", // <<< ADDED
+        organizationType: "University",
       });
       setImagePreview(null);
     } catch (err) {
@@ -265,7 +284,7 @@ export default function CreatePlay() {
             <option value="Paid">Paid</option>
           </select>
 
-          <label>Organization Type</label> {/* <<< ADDED */}
+          <label>Organization Type</label>
           <select
             name="organizationType"
             value={formData.organizationType}
@@ -321,6 +340,16 @@ export default function CreatePlay() {
               />
             </div>
           )}
+
+          {/* ------------------ Play PDF/DOCX ------------------ */}
+          <label>Play Preview File (PDF or DOCX)</label>
+          <input
+            type="file"
+            name="playFile"
+            accept=".pdf,.docx"
+            onChange={handleChange}
+          />
+          <small>Allowed file types: PDF, DOCX</small>
 
           <label>Abstract</label>
           <textarea

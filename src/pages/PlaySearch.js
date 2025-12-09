@@ -426,7 +426,7 @@ export default function PlaySearch() {
       )}
 
       {/* --- Floating Create Play Button for account 3 --- */}
-      {user && user.account === 3 && (
+      {user && (user.account === 3 || user.account === 4) && (
         <div
           className="floating-create-play-btn"
           onClick={() => navigate("/plays/create")}
