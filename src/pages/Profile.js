@@ -3,20 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../css/Profile.css";
 import axios from "axios";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
-
-// Helper function to format phone numbers (not used here, but kept if needed later)
-const formatPhoneNumber = (number, defaultCountry = "US") => {
-  if (!number) return "";
-  try {
-    const phoneNumber = parsePhoneNumberFromString(number, defaultCountry);
-    if (!phoneNumber) return number;
-    return phoneNumber.formatInternational();
-  } catch (error) {
-    console.error("Error formatting phone number:", error);
-    return number;
-  }
-};
 
 export default function Profile() {
   const { id } = useParams();
@@ -169,17 +155,6 @@ export default function Profile() {
           <p>{profile.companyName || "No company listed."}</p>
           <p>{profile.street && profile.stateCity ? `${profile.street}, ${profile.stateCity}` : "No address provided."}</p>
           <p>{profile.country || "No country specified."}</p>
-          {profile.website ? (
-            <p>
-              <a
-                href={profile.website.startsWith("http") ? profile.website : `https://${profile.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {profile.website}
-              </a>
-            </p>
-          ) : <p>No website provided.</p>}
         </div>
 
         <div className="biography">
