@@ -4,11 +4,10 @@ import axios from "axios";
 import "../App.css";
 import "../css/PlaySearch.css";
 import { FaSearch, FaFilter, FaEdit } from "react-icons/fa";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function PlaySearch() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { page: pageParam } = useParams();
 
   const [plays, setPlays] = useState([]);
@@ -101,9 +100,6 @@ export default function PlaySearch() {
   useEffect(() => {
     document.title = "MPDB";
     checkAuth();
-
-    // REMOVED THE CODE THAT WAS RESETTING THE SEARCH BAR
-
     fetchPlays(parseInt(pageParam) || 1);
   }, [fetchPlays, checkAuth, pageParam]);
 
