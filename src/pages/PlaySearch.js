@@ -100,15 +100,12 @@ export default function PlaySearch() {
 
   useEffect(() => {
     document.title = "MPDB";
-
     checkAuth();
 
-    const params = new URLSearchParams(location.search);
-    const searchQuery = params.get("search") || "";
-    setSearch(searchQuery);
+    // REMOVED THE CODE THAT WAS RESETTING THE SEARCH BAR
 
     fetchPlays(parseInt(pageParam) || 1);
-  }, [location.search, fetchPlays, checkAuth, pageParam]);
+  }, [fetchPlays, checkAuth, pageParam]);
 
   useEffect(() => {
     const handleGlobalEnter = (e) => {
