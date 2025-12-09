@@ -83,6 +83,8 @@ export default function EditPlay() {
         });
 
         setImagePreview(play.coverImage || null);
+
+        // Safely set existingPlayFile
         setExistingPlayFile(play.playFile || null);
       } catch (err) {
         setMessage({ text: "Failed to load play.", type: "error" });
@@ -207,6 +209,14 @@ export default function EditPlay() {
     }
   };
 
+  // ------------------- Helper to safely display filename -------------------
+  const getExistingFileName = (file) => {
+    if (!file) return null;
+    if (typeof file === "string") return file.split("/").pop();
+    if (file.filename) return file.filename;
+    return null;
+  };
+
   return (
     <div className="create-play-wrapper">
       <h2>Edit Play</h2>
@@ -321,10 +331,10 @@ export default function EditPlay() {
           <label>Play Sample File (PDF/DOCX)</label>
           <input type="file" name="playFile" accept=".pdf,.docx" onChange={handleChange} />
 
-          {/* Show current or new file */}
+          {/* Display existing or new file */}
           {existingPlayFile && !formData.playFile && (
             <p style={{ marginTop: "5px" }}>
-              Current File: <strong>{existingPlayFile.split("/").pop()}</strong>
+              Current File: <strong>{getExistingFileName(existingPlayFile)}</strong>
             </p>
           )}
           {formData.playFile && (
