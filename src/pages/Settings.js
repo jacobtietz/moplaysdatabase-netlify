@@ -34,17 +34,17 @@ export default function Settings() {
         if (!res.data.user) throw new Error("Not authenticated");
         const u = res.data.user;
         setUser(u);
-        setFirstName(u.firstName || " ");
-        setLastName(u.lastName || " ");
+        setFirstName(u.firstName || "");
+        setLastName(u.lastName || "");
         setProfilePic(u.profile?.profilePicture || null);
-        setPhone(u.phone || " ");
-        setDescription(u.profile?.description || " ");
-        setBiography(u.profile?.biography || " ");
-        setCompanyName(u.profile?.companyName || " ");
-        setStreet(u.profile?.street || " ");
-        setStateCity(u.profile?.stateCity || " ");
-        setCountry(u.profile?.country || " ");
-        setWebsite(u.profile?.website || " ");
+        setPhone(u.phone || "");
+        setDescription(u.profile?.description || "");
+        setBiography(u.profile?.biography || "");
+        setCompanyName(u.profile?.companyName || "");
+        setStreet(u.profile?.street || "");
+        setStateCity(u.profile?.stateCity || "");
+        setCountry(u.profile?.country || "");
+        setWebsite(u.profile?.website || "");
         setContact(u.contact || false);
       } catch (err) {
         navigate("/login", { replace: true });
@@ -89,29 +89,27 @@ export default function Settings() {
     try {
       const formData = new FormData();
 
-      // Ensure every field has at least a space
-      formData.append("firstName", firstName.trim() || " ");
-      formData.append("lastName", lastName.trim() || " ");
-      formData.append("phone", phone.trim() || " ");
+      // Append fields only if they have content; leave blank if empty
+      if (firstName) formData.append("firstName", firstName.trim());
+      if (lastName) formData.append("lastName", lastName.trim());
+      if (phone) formData.append("phone", phone.trim());
       formData.append("contact", contact ? 1 : 0);
 
       // Nested profile object
       const profileData = {
-        description: description.trim() || " ",
-        biography: biography.trim() || " ",
-        companyName: companyName.trim() || " ",
-        street: street.trim() || " ",
-        stateCity: stateCity.trim() || " ",
-        country: country.trim() || " ",
-        website: website.trim() || " ",
+        description: description || "",
+        biography: biography || "",
+        companyName: companyName || "",
+        street: street || "",
+        stateCity: stateCity || "",
+        country: country || "",
+        website: website || "",
       };
 
-      // If profilePic is a new File, append it separately
       if (profilePic) {
         formData.append("profilePicture", profilePic);
       }
 
-      // Append nested profile as JSON string for backend parsing
       formData.append("profile", JSON.stringify(profileData));
 
       const res = await axios.put(`${API_URL}/api/users/profile`, formData, {
