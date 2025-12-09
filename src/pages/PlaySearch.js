@@ -24,7 +24,6 @@ export default function PlaySearch() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [expandedAbstract, setExpandedAbstract] = useState({});
   const [enterCooldown, setEnterCooldown] = useState(false);
-  const [customPopup, setCustomPopup] = useState({ open: false, message: "", onConfirm: null });
   const menuRef = useRef(null);
 
   const [advancedFilters, setAdvancedFilters] = useState({
@@ -210,44 +209,16 @@ export default function PlaySearch() {
       document.body.removeChild(link);
     } catch (err) {
       console.error("Error fetching play sample:", err);
-      setCustomPopup({
-        open: true,
-        message: err.response?.status === 404 ? "No play sample exists for this play." : "Error fetching play sample",
-        onConfirm: () => setCustomPopup({ open: false, message: "", onConfirm: null }),
-      });
+      alert(
+        err.response?.status === 404
+          ? "No available play sample for this play."
+          : "Error fetching play sample"
+      );
     }
-  };
-
-  const requestPlaySample = (play) => {
-    if (!play.playFile) {
-      setCustomPopup({
-        open: true,
-        message: "No play sample exists for this play.",
-        onConfirm: () => setCustomPopup({ open: false, message: "", onConfirm: null }),
-      });
-      return;
-    }
-    setCustomPopup({
-      open: true,
-      message: "Are you sure you want to download this play sample?",
-      onConfirm: () => {
-        setCustomPopup({ open: false, message: "", onConfirm: null });
-        handlePlaySample(play);
-      },
-    });
   };
 
   return (
     <div className="play-search-wrapper">
-      {customPopup.open && (
-        <div className="custom-popup-overlay">
-          <div className="custom-popup">
-            <p>{customPopup.message}</p>
-            <button onClick={customPopup.onConfirm}>OK</button>
-          </div>
-        </div>
-      )}
-
       <header className="mpdb-header">
         <div className="search-user-container">
           {user && user.account === 4 && (
@@ -446,7 +417,11 @@ export default function PlaySearch() {
                   <div className="play-actions">
                     <button
                       className="request-sample-btn"
-                      onClick={() => requestPlaySample(play)}
+                      onClick={() => {
+                        if (window.confirm("Are you sure you want to download this play sample?")) {
+                          handlePlaySample(play);
+                        }
+                      }}
                     >
                       Request Play Sample
                     </button>
@@ -473,10 +448,11 @@ export default function PlaySearch() {
 
       {user && (user.account === 3 || user.account === 4) && (
         <div
-          className="floating-create-play"
-          onClick={() => navigate("/create-play")}
+          className="floating-create-play-btn"
+          onClick={() => navigate("/plays/create")}
+          title="Create Play"
         >
-          Create New Play
+          <img src="/bookimage.png" alt="Create Play" />
         </div>
       )}
     </div>
