@@ -60,8 +60,14 @@ const ContactThem = () => {
       return;
     }
 
+    // FRONTEND CHECK: prevent sending if target user contact === 0
+    if (targetUser?.contact !== 1) {
+      setErrorMsg("This user is not accepting messages at this time.");
+      setSubmissionStatus("error");
+      return;
+    }
+
     try {
-      // Only send the message; backend will use req.user info
       await axios.post(
         `${API_URL}/api/contact/user/${id}`,
         { message },
@@ -83,6 +89,20 @@ const ContactThem = () => {
 
   if (!targetUser) return <p>Loading user...</p>;
   if (!currentUser) return <p>Loading your info...</p>;
+
+  // If contact === 0, block frontend entirely
+  if (targetUser.contact !== 1) {
+    return (
+      <div className="contact-page-container">
+        <div className="contact-card">
+          <header className="contact-header">
+            <h1>Contact {targetUser.firstName} {targetUser.lastName}</h1>
+            <p className="subtitle">This user is not accepting messages at this time.</p>
+          </header>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="contact-page-container">
