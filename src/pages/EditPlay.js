@@ -6,7 +6,8 @@ import "../css/EditPlay.css";
 
 export default function EditPlay() {
   const navigate = useNavigate();
-  const { id } = useParams(); // play ID from URL
+  const { id } = useParams();
+
   const [formData, setFormData] = useState({
     title: "",
     publicationDate: "",
@@ -17,10 +18,13 @@ export default function EditPlay() {
     females: "",
     funding: "Donated",
     coverImage: null,
+    playFile: null, // <<< ADDED
     abstract: "",
     genre: "Comedy",
-    organizationType: "University", // <<< ADDED
+    organizationType: "University",
   });
+
+  const [existingPlayFile, setExistingPlayFile] = useState(null); // <<< ADDED
   const [imagePreview, setImagePreview] = useState(null);
   const [message, setMessage] = useState({ text: "", type: "" });
   const [currentUser, setCurrentUser] = useState(null);
@@ -46,7 +50,6 @@ export default function EditPlay() {
         }
         setCurrentUser(user);
       } catch (err) {
-        console.error("Auth check failed:", err.response?.data?.message);
         navigate("/login", { replace: true });
       }
     };
@@ -62,6 +65,7 @@ export default function EditPlay() {
           withCredentials: true,
         });
         const play = res.data;
+
         setFormData({
           title: play.title || "",
           publicationDate: play.publicationDate?.slice(0, 10) || "",
@@ -72,13 +76,15 @@ export default function EditPlay() {
           females: play.females || "",
           funding: play.funding || "Donated",
           coverImage: null,
+          playFile: null, // user can replace
           abstract: play.abstract || "",
           genre: play.genre || "Comedy",
-          organizationType: play.organizationType || "University", // <<< ADDED
+          organizationType: play.organizationType || "University",
         });
+
         setImagePreview(play.coverImage || null);
+        setExistingPlayFile(play.playFile || null); // <<< ADDED
       } catch (err) {
-        console.error("Failed to fetch play:", err);
         setMessage({ text: "Failed to load play.", type: "error" });
       }
     };
@@ -108,16 +114,16 @@ export default function EditPlay() {
                 });
                 resolve(resizedFile);
               } else {
-                reject(new Error("Canvas is empty"));
+                reject("Resize failed");
               }
             },
             "image/jpeg",
             0.8
           );
         };
-        img.onerror = reject;
         img.src = e.target.result;
       };
+
       reader.readAsDataURL(file);
     });
   };
@@ -125,18 +131,42 @@ export default function EditPlay() {
   // ------------------- Form Handlers -------------------
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
+
+    // File inputs
     if (files && files[0]) {
-      try {
-        const resized = await resizeImage(files[0], 200, 250);
-        setFormData({ ...formData, [name]: resized });
-        setImagePreview(URL.createObjectURL(resized));
-      } catch (error) {
-        console.error("Image resize failed:", error);
-        setMessage({ text: "Image resize failed.", type: "error" });
+      // Cover image
+      if (name === "coverImage") {
+        try {
+          const resized = await resizeImage(files[0], 200, 250);
+          setFormData({ ...formData, coverImage: resized });
+          setImagePreview(URL.createObjectURL(resized));
+        } catch {
+          setMessage({ text: "Image resize failed.", type: "error" });
+        }
       }
-    } else {
-      setFormData({ ...formData, [name]: value });
+
+      // Play sample file (PDF/DOCX)
+      else if (name === "playFile") {
+        const file = files[0];
+        const allowed = [
+          "application/pdf",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
+
+        if (!allowed.includes(file.type)) {
+          setMessage({ text: "Only PDF or DOCX files are allowed.", type: "error" });
+          return;
+        }
+
+        setFormData({ ...formData, playFile: file });
+        setExistingPlayFile(null); // user is replacing file
+      }
+
+      return;
     }
+
+    // Normal inputs
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleNumericKey = (e, maxLength) => {
@@ -154,30 +184,23 @@ export default function EditPlay() {
   // ------------------- Submit Form -------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!currentUser) {
-      setMessage({ text: "You must be logged in to edit a play.", type: "error" });
-      return;
-    }
-    if (currentUser.account !== 3 && currentUser.account !== 4) {
-      setMessage({ text: "You are not authorized to edit a play.", type: "error" });
+
+    if (!currentUser || (currentUser.account !== 3 && currentUser.account !== 4)) {
+      setMessage({ text: "You are not authorized.", type: "error" });
       return;
     }
 
     try {
       const data = new FormData();
-      data.append("title", formData.title);
-      data.append("publicationDate", formData.publicationDate);
-      data.append("acts", formData.acts);
-      data.append("duration", formData.duration);
-      data.append("total", formData.total);
-      data.append("males", formData.males);
-      data.append("females", formData.females);
-      data.append("funding", formData.funding);
-      data.append("genre", formData.genre);
-      data.append("abstract", formData.abstract);
-      data.append("organizationType", formData.organizationType); // <<< ADDED
-      if (formData.coverImage) data.append("coverImage", formData.coverImage);
 
+      // Append all values
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          data.append(key, value);
+        }
+      });
+
+      // PUT request
       await axios.put(`${API_URL}/api/plays/${id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
@@ -185,10 +208,8 @@ export default function EditPlay() {
 
       setMessage({ text: "Play updated successfully!", type: "success" });
     } catch (err) {
-      console.error("Failed to update play:", err.response || err);
-      const errorMsg =
-        err.response?.data?.message || "Failed to update play. Please try again.";
-      setMessage({ text: errorMsg, type: "error" });
+      const msg = err.response?.data?.message || "Failed to update play.";
+      setMessage({ text: msg, type: "error" });
     }
   };
 
@@ -199,23 +220,15 @@ export default function EditPlay() {
 
       {currentUser && (currentUser.account === 3 || currentUser.account === 4) ? (
         <form className="create-play-form" onSubmit={handleSubmit}>
+          {/* Title */}
           <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="title" value={formData.title} onChange={handleChange} required />
 
+          {/* Publication Date */}
           <label>Publication Date</label>
-          <input
-            type="date"
-            name="publicationDate"
-            value={formData.publicationDate}
-            onChange={handleChange}
-          />
+          <input type="date" name="publicationDate" value={formData.publicationDate} onChange={handleChange} />
 
+          {/* Acts */}
           <label>Acts</label>
           <input
             type="text"
@@ -225,6 +238,7 @@ export default function EditPlay() {
             onKeyDown={(e) => handleNumericKey(e, 2)}
           />
 
+          {/* Duration */}
           <label>Duration (minutes)</label>
           <input
             type="text"
@@ -235,6 +249,7 @@ export default function EditPlay() {
             required
           />
 
+          {/* Total Actors */}
           <label>Total Actors</label>
           <input
             type="text"
@@ -245,6 +260,7 @@ export default function EditPlay() {
             required
           />
 
+          {/* Males */}
           <label>Male Actors</label>
           <input
             type="text"
@@ -254,6 +270,7 @@ export default function EditPlay() {
             onKeyDown={(e) => handleNumericKey(e, 2)}
           />
 
+          {/* Females */}
           <label>Female Actors</label>
           <input
             type="text"
@@ -263,13 +280,15 @@ export default function EditPlay() {
             onKeyDown={(e) => handleNumericKey(e, 2)}
           />
 
+          {/* Funding */}
           <label>Funding</label>
           <select name="funding" value={formData.funding} onChange={handleChange}>
             <option value="Donated">Donated</option>
             <option value="Paid">Paid</option>
           </select>
 
-          <label>Organization Type</label> {/* <<< ADDED */}
+          {/* Organization Type */}
+          <label>Organization Type</label>
           <select
             name="organizationType"
             value={formData.organizationType}
@@ -284,6 +303,7 @@ export default function EditPlay() {
             <option value="Professional">Professional</option>
           </select>
 
+          {/* Genre */}
           <label>Genre</label>
           <select name="genre" value={formData.genre} onChange={handleChange} required>
             <option value="Comedy">Comedy</option>
@@ -294,21 +314,18 @@ export default function EditPlay() {
             <option value="Mystery">Mystery</option>
           </select>
 
+          {/* Cover Image */}
           <label>Image File</label>
-          <input
-            type="file"
-            name="coverImage"
-            accept="image/*"
-            onChange={handleChange}
-          />
+          <input type="file" name="coverImage" accept="image/*" onChange={handleChange} />
+
           {imagePreview && (
             <div
               className="image-preview"
               style={{
                 width: "200px",
                 height: "250px",
-                overflow: "hidden",
                 borderRadius: "6px",
+                overflow: "hidden",
                 border: "1px solid #ccc",
                 marginTop: "10px",
               }}
@@ -321,12 +338,25 @@ export default function EditPlay() {
             </div>
           )}
 
+          {/* Play Sample File */}
+          <label>Play Sample File (PDF/DOCX)</label>
+          <input type="file" name="playFile" accept=".pdf,.docx" onChange={handleChange} />
+
+          {existingPlayFile && (
+            <p style={{ marginTop: "5px" }}>
+              Current File: <strong>{existingPlayFile.split("/").pop()}</strong>
+            </p>
+          )}
+
+          {formData.playFile && (
+            <p style={{ marginTop: "5px" }}>
+              New File Selected: <strong>{formData.playFile.name}</strong>
+            </p>
+          )}
+
+          {/* Abstract */}
           <label>Abstract</label>
-          <textarea
-            name="abstract"
-            value={formData.abstract}
-            onChange={handleChange}
-          />
+          <textarea name="abstract" value={formData.abstract} onChange={handleChange} />
 
           <button type="submit">Update Play</button>
         </form>
