@@ -136,7 +136,7 @@ export default function Login() {
       {/* Popup for account creation */}
       {showPopup && (
         <Popup
-          message="Your account will be verified within the next 24 hours. We thank you for your patience!"
+          message="Your account has been created! Playwright accounts will be verified within 24 hours. Thank you for your patience."
           onClose={() => setShowPopup(false)}
         />
       )}
