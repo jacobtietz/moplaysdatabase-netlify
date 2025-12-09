@@ -5,7 +5,7 @@ import "../css/AdminUsers.css";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // <-- new state
+  const [searchTerm, setSearchTerm] = useState("");
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   // Account level mapping
@@ -13,14 +13,16 @@ export default function AdminUsers() {
     0: "User",
     1: "Locked",
     3: "Playwright",
-    4: "Administrator",
+    4: "Administrator", // still display current admins
   };
-  const levelOptions = Object.keys(accountLevels).map(Number); // [0, 1, 3, 4]
+
+  // Only allow changing to non-admin levels (0, 1, 3)
+  const levelOptions = [0, 1, 3];
 
   // Fetch all users from DB
   const fetchUsers = useCallback(async () => {
     try {
-      const res = await axios.get(`${API_URL}/api/users`, { withCredentials: true });
+      const res = await axios.get(`${API_URL}/api/admin/users`, { withCredentials: true });
       const userList = Array.isArray(res.data) ? res.data : res.data.users || [];
       setUsers(userList);
     } catch (err) {
@@ -43,7 +45,7 @@ export default function AdminUsers() {
 
     try {
       await axios.put(
-        `${API_URL}/api/users/${id}/account`,
+        `${API_URL}/api/admin/users/${id}/account`,
         { account: newLevel },
         { withCredentials: true }
       );
