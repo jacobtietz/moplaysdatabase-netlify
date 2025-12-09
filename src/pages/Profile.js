@@ -5,7 +5,7 @@ import "../css/Profile.css";
 import axios from "axios";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-// Helper function to format phone numbers
+// Helper function to format phone numbers (not used here, but kept if needed later)
 const formatPhoneNumber = (number, defaultCountry = "US") => {
   if (!number) return "";
   try {
@@ -151,7 +151,6 @@ export default function Profile() {
               <span className="link-divider">|</span>
             </>
           )}
-          {/* Updated contact link to go to ContactThem page for this user's ID */}
           <span
             className="profile-link"
             style={{ cursor: "pointer", textDecoration: "underline" }}
@@ -170,8 +169,6 @@ export default function Profile() {
           <p>{profile.companyName || "No company listed."}</p>
           <p>{profile.street && profile.stateCity ? `${profile.street}, ${profile.stateCity}` : "No address provided."}</p>
           <p>{profile.country || "No country specified."}</p>
-          <p>{user.email}</p>
-          <p>{formatPhoneNumber(user.phone)}</p>
           {profile.website ? (
             <p>
               <a
