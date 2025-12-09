@@ -311,7 +311,6 @@ export default function EditPlay() {
           {/* Cover Image */}
           <label>Image File</label>
           <input type="file" name="coverImage" accept="image/*" onChange={handleChange} />
-
           {imagePreview && (
             <div className="image-preview">
               <img src={imagePreview} alt="Preview" />
@@ -322,12 +321,12 @@ export default function EditPlay() {
           <label>Play Sample File (PDF/DOCX)</label>
           <input type="file" name="playFile" accept=".pdf,.docx" onChange={handleChange} />
 
-          {existingPlayFile && (
+          {/* Show current or new file */}
+          {existingPlayFile && !formData.playFile && (
             <p style={{ marginTop: "5px" }}>
               Current File: <strong>{existingPlayFile.split("/").pop()}</strong>
             </p>
           )}
-
           {formData.playFile && (
             <p style={{ marginTop: "5px" }}>
               New File Selected: <strong>{formData.playFile.name}</strong>
