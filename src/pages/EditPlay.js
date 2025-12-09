@@ -83,8 +83,6 @@ export default function EditPlay() {
         });
 
         setImagePreview(play.coverImage || null);
-
-        // Safely set existingPlayFile
         setExistingPlayFile(play.playFile || null);
       } catch (err) {
         setMessage({ text: "Failed to load play.", type: "error" });
@@ -205,6 +203,19 @@ export default function EditPlay() {
       setMessage({ text: "Play updated successfully!", type: "success" });
     } catch (err) {
       const msg = err.response?.data?.message || "Failed to update play.";
+      setMessage({ text: msg, type: "error" });
+    }
+  };
+
+  // ------------------- Delete Play -------------------
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this play? This action cannot be undone.")) return;
+
+    try {
+      await axios.delete(`${API_URL}/api/plays/${id}`, { withCredentials: true });
+      navigate("/plays"); // redirect to play list
+    } catch (err) {
+      const msg = err.response?.data?.message || "Failed to delete play.";
       setMessage({ text: msg, type: "error" });
     }
   };
@@ -348,6 +359,13 @@ export default function EditPlay() {
           <textarea name="abstract" value={formData.abstract} onChange={handleChange} />
 
           <button type="submit">Update Play</button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            style={{ backgroundColor: "#ff4d4f", marginTop: "10px" }}
+          >
+            Delete Play
+          </button>
         </form>
       ) : (
         <p>You do not have permission to edit this play.</p>
