@@ -40,6 +40,7 @@ export default function PlaySearch() {
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  // ------------------- Fetch Plays -------------------
   const fetchPlays = useCallback(
     async (newPage = 1) => {
       try {
@@ -86,6 +87,7 @@ export default function PlaySearch() {
     [search, genre, fundingType, organizationType, advancedFilters, navigate, API_URL]
   );
 
+  // ------------------- Auth Check -------------------
   const checkAuth = useCallback(async () => {
     try {
       const res = await axios.get(`${API_URL}/api/users/profile`, {
@@ -98,6 +100,7 @@ export default function PlaySearch() {
     }
   }, [navigate, API_URL]);
 
+  // ------------------- Populate search from URL -------------------
   useEffect(() => {
     document.title = "MPDB";
 
@@ -110,6 +113,7 @@ export default function PlaySearch() {
     fetchPlays(parseInt(pageParam) || 1);
   }, [location.search, fetchPlays, checkAuth, pageParam]);
 
+  // ------------------- Global Enter Key Listener -------------------
   useEffect(() => {
     const handleGlobalEnter = (e) => {
       if (e.key === "Enter" && !enterCooldown) {
@@ -122,6 +126,7 @@ export default function PlaySearch() {
     return () => document.removeEventListener("keydown", handleGlobalEnter);
   }, [enterCooldown, fetchPlays]);
 
+  // ------------------- Click Outside Menu -------------------
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target))
@@ -172,6 +177,7 @@ export default function PlaySearch() {
     if (newPage >= 1 && newPage <= totalPages && newPage !== page) fetchPlays(newPage);
   };
 
+  // ------------------- Reset Filters -------------------
   const resetFilters = () => {
     setSearch("");
     setGenre("");
@@ -193,30 +199,28 @@ export default function PlaySearch() {
 
   const shownResults = Math.min(page * 10, totalResults);
 
+  // ------------------- Play Sample Request -------------------
   const handlePlaySample = async (play) => {
     try {
-      const response = await axios.get(`${API_URL}/api/plays/${play._id}/sample`, {
+      const response = await axios.get(`${API_URL}/api/plays/sample/${play._id}`, {
+        responseType: 'blob', // important to get the file as a blob
         withCredentials: true,
       });
-      if (!response.data || !response.data.sampleUrl) {
-        alert("There is no available play sample");
-        return;
-      }
 
-      const confirmDownload = window.confirm(
-        "Are you sure you want to download this play sample?"
-      );
-      if (confirmDownload) {
-        const link = document.createElement("a");
-        link.href = response.data.sampleUrl;
-        link.download = `${play.title}-sample.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", play.playFile?.filename || `${play.title}-sample.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (err) {
       console.error("Error fetching play sample:", err);
-      alert(err.response?.data?.message || "Error fetching play sample");
+      alert(
+        err.response?.status === 404
+          ? "No available play sample for this play."
+          : "Error fetching play sample"
+      );
     }
   };
 
