@@ -109,16 +109,19 @@ export default function AdminUsers() {
               <td>{accountLevels[user.account] || "Unknown"}</td>
 
               <td>
-                {levelOptions.map((level) => (
-                  <button
-                    key={level}
-                    className="level-btn"
-                    disabled={user.account === level}
-                    onClick={() => handleAccountChange(user._id, user.account, level)}
-                  >
-                    {accountLevels[level]}
-                  </button>
-                ))}
+                {user.account === 4
+                  ? null // no buttons for admins
+                  : levelOptions.map((level) => (
+                      <button
+                        key={level}
+                        className="level-btn"
+                        disabled={user.account === level}
+                        onClick={() => handleAccountChange(user._id, user.account, level)}
+                      >
+                        {accountLevels[level]}
+                      </button>
+                    ))
+                }
               </td>
 
               <td>
