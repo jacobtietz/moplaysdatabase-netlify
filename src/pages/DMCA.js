@@ -86,10 +86,6 @@ const DMCA = () => {
                         <a href="mailto:moplaysdatabase@gmail.com">moplaysdatabase@gmail.com</a>
                     </span>
                 </li>
-                <li className="agent-detail-item">
-                    <span className="agent-label">Phone:</span> 
-                    <span className="agent-value">+1 111-111-1111</span>
-                </li>
             </ul>
         </section>
         
