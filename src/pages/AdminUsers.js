@@ -59,7 +59,7 @@ export default function AdminUsers() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axios.delete(`${API_URL}/api/users/${id}`, { withCredentials: true });
+      await axios.delete(`${API_URL}/api/admin/users/${id}`, { withCredentials: true });
       fetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
