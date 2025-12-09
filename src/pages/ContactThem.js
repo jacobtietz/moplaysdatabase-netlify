@@ -43,6 +43,9 @@ const ContactThem = () => {
     fetchCurrentUser();
   }, [API_URL]);
 
+  // Centralized check for whether the target user allows contact
+  const canContact = Number(targetUser?.contact) === 1;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmissionStatus(null);
@@ -61,12 +64,11 @@ const ContactThem = () => {
     }
 
     // FRONTEND CHECK: prevent sending if target user contact === 0
-if (Number(targetUser?.contact) !== 1) {
-  setErrorMsg("This user is not accepting messages at this time.");
-  setSubmissionStatus("error");
-  return;
-}
-
+    if (!canContact) {
+      setErrorMsg("This user is not accepting messages at this time.");
+      setSubmissionStatus("error");
+      return;
+    }
 
     try {
       await axios.post(
@@ -91,8 +93,8 @@ if (Number(targetUser?.contact) !== 1) {
   if (!targetUser) return <p>Loading user...</p>;
   if (!currentUser) return <p>Loading your info...</p>;
 
-  // If contact === 0, block frontend entirely
-  if (targetUser.contact !== 1) {
+  // Block frontend entirely if contact is disabled
+  if (!canContact) {
     return (
       <div className="contact-page-container">
         <div className="contact-card">
