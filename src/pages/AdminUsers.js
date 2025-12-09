@@ -7,7 +7,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // Define the account levels you want to show
+  // Account level mapping
   const accountLevels = {
     0: "User",
     1: "Locked",
@@ -24,8 +24,6 @@ export default function AdminUsers() {
         withCredentials: true,
       });
 
-      console.log("Fetched users:", res.data);
-
       const userList = Array.isArray(res.data) ? res.data : res.data.users || [];
       setUsers(userList);
     } catch (err) {
@@ -37,8 +35,16 @@ export default function AdminUsers() {
     fetchUsers();
   }, [fetchUsers]);
 
-  // Update user account level
-  const handleAccountChange = async (id, newLevel) => {
+  // Update user account level with confirmation
+  const handleAccountChange = async (id, currentLevel, newLevel) => {
+    if (currentLevel === newLevel) return;
+
+    const confirmChange = window.confirm(
+      `Are you sure you want to change this user's account level from "${accountLevels[currentLevel]}" to "${accountLevels[newLevel]}"?`
+    );
+
+    if (!confirmChange) return;
+
     try {
       await axios.put(
         `${API_URL}/api/users/${id}/account`,
@@ -46,9 +52,10 @@ export default function AdminUsers() {
         { withCredentials: true }
       );
 
-      fetchUsers();
+      fetchUsers(); // refresh list after change
     } catch (err) {
       console.error("Failed to update account level:", err);
+      alert("Failed to update account level. Check console for details.");
     }
   };
 
@@ -57,10 +64,7 @@ export default function AdminUsers() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axios.delete(`${API_URL}/api/users/${id}`, {
-        withCredentials: true,
-      });
-
+      await axios.delete(`${API_URL}/api/users/${id}`, { withCredentials: true });
       fetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
@@ -95,7 +99,7 @@ export default function AdminUsers() {
                     key={level}
                     className="level-btn"
                     disabled={user.account === level}
-                    onClick={() => handleAccountChange(user._id, level)}
+                    onClick={() => handleAccountChange(user._id, user.account, level)}
                   >
                     {accountLevels[level]}
                   </button>
