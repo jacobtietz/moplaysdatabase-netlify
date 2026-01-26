@@ -263,7 +263,8 @@ export default function PlaySearch() {
           <option value="Drama">Drama</option>
           <option value="Comedy">Comedy</option>
           <option value="Musical">Musical</option>
-          <option value="Theatre of the Mind">Theatre of the Mind</option>
+          <option value="Reader’s Theatre">Reader’s Theatre</option>
+          <option value="Monologue">Monologue</option>
           <option value="Tragedy">Tragedy</option>
           <option value="Mystery">Mystery</option>
         </select>
@@ -281,7 +282,6 @@ export default function PlaySearch() {
           <option value="High School">High School</option>
           <option value="University">University</option>
           <option value="Community">Community</option>
-          <option value="Professional">Professional</option>
         </select>
 
         <div className="filter-wrapper">
